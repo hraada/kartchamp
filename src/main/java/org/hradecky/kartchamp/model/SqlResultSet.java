@@ -1,6 +1,12 @@
 package org.hradecky.kartchamp.model;
 
 
+/**
+ * Simple pojo for result set
+ * 
+ * @author hradba
+ *
+ */
 public class SqlResultSet {
 
     private long insertId;

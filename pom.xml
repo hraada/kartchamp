@@ -10,6 +10,18 @@
 
     <name>kartchamp</name>
 
+
+    <properties>
+        <jetty.version>6.1.23</jetty.version>
+        <javaee.version>6.0</javaee.version>
+        <spring.version>3.2.2.RELEASE</spring.version>
+        <cglib.version>2.2.2</cglib.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jackson-mapper-asl.version>1.9.12</jackson-mapper-asl.version>
+        <jaxb-api.version>2.2.7</jaxb-api.version>
+        <sqlite-jdbc.version>3.7.2</sqlite-jdbc.version>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -25,7 +37,7 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.7.2</version>
+            <version>${sqlite-jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
@@ -139,13 +151,4 @@
         </profile>
     </profiles>
 
-    <properties>
-        <jetty.version>6.1.23</jetty.version>
-        <javaee.version>6.0</javaee.version>
-        <spring.version>3.2.2.RELEASE</spring.version>
-        <cglib.version>2.2.2</cglib.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson-mapper-asl.version>1.9.12</jackson-mapper-asl.version>
-        <jaxb-api.version>2.2.7</jaxb-api.version>
-    </properties>
 </project>

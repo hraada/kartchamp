@@ -16,6 +16,8 @@ import java.util.Map;
 
 /**
  * Main controller with simple purpose. Forward sql queries from http interface to jdbc interface.
+ * 
+ * @author 
  */
 @Controller
 @RequestMapping(value = "/executeQuery")
@@ -28,7 +30,8 @@ public class SqlOverHttpController {
         //Load sqlite jdbc driver
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite::resource:org/hradecky/kartchamp/db/kartchamp");
+            //connection = DriverManager.getConnection("jdbc:sqlite::resource:org/hradecky/kartchamp/db/kartchamp");
+            connection = DriverManager.getConnection("jdbc:sqlite:data/kartchamp");
         } catch (ClassNotFoundException e) {
             log.error("Error during JDBC initialization", e);
         } catch (SQLException e) {
