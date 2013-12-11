@@ -28,7 +28,6 @@ var kartchamp = angular.module('kartchamp', ['service', 'directive', 'filter', '
             when('/management/season', {templateUrl: '/html/partials/management/season.html', controller: 'SeasonController'}).
             when('/management/team', {templateUrl: '/html/partials/management/team.html', controller: 'TeamController'}).
             when('/management/driver', {templateUrl: '/html/partials/management/driver.html', controller: 'DriverController'}).
-            when('/management/importexport', {templateUrl: '/html/partials/management/importexport.html', controller: 'ImportExportController'}).
 
             otherwise({redirectTo: '/dashboard'});
     }]);
