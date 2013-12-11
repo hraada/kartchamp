@@ -1,0 +1,19 @@
+<ng-include src="'/html/partials/management/menu.html'"></ng-include>
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li class="active"><a href="#/management/season">Správa šampionátu</a> <span class="divider">/</span></li>
+        <li class="active">Import/Export</li>
+    </ul>
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <button ng-click="exportButtonClicked()" class="btn">Exportovat obsah databáze</button>
+            <a href="data:application/txt;charset=utf-8,{{databaseDumpEncoded}}" download="{{databaseDumpFileName}}"
+               class="btn" ng-show="databaseDump != ''">Uložit do souboru</a>
+        </div>
+    </div>
+    <textarea style="width: 90%;" rows="30" ng-model="databaseDump" ng-show="databaseDump != ''"></textarea>
+</div>
+

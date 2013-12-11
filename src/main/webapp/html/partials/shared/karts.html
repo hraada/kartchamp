@@ -1,0 +1,29 @@
+<ng-include src="'/html/partials/menu.html'"></ng-include>
+
+<div class="span9">
+
+
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li>{{race.name}} <span class="divider">/</span></li>
+        <li class="active">Nominace</li>
+    </ul>
+
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Kára</th>
+            <th>Skutečné číslo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="kart in karts">
+            <td>Kára #{{kart.kartIndex + 1}}</td>
+            <td><input type="text" ng-model="kart.number"/></td>
+        </tr>
+        </tbody>
+
+    </table>
+    <button class="btn btn-primary" ng-click="loadTestData()">Testovací data čísel kár</button>
+
+</div><!--/span-->

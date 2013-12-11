@@ -1,0 +1,21 @@
+<div class="span6" ng-controller="DashboardController">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Závod</th>
+            <th>Formát závodu</th>
+            <th>Datum konání</th>
+            <th>Akce</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="race in races">
+            <td>{{race.name}}</td>
+            <td>{{raceFormats.idToLabel[race.raceType]}}</td>
+            <td>{{race.raceDate | date:'dd.MM.yyyy'}}</td>
+            <td><a class="btn" ng-click="editRaceButtonClicked(race)"><i class="icon-tasks"></i> Organizace</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <!--<button class="btn btn-primary" ng-click="loadAppTestData()">Testovací data</button>-->
+</div>

@@ -1,0 +1,30 @@
+<ng-include src="'/html/partials/menu.html'"></ng-include>
+
+<div class="span9">
+
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li>{{race.name}} <span class="divider">/</span></li>
+        <li class="active">Losování</li>
+    </ul>
+
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Tým</th>
+            <th>Los</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="raceAssignment in raceAssignments">
+            <td>{{raceAssignment.team.name}}</td>
+            <td><input type="number" ng-model="raceAssignment.teamCast"/></td>
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <button class="btn btn-primary" ng-click="loadTestData()">Testovací data</button>
+
+</div>

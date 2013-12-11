@@ -1,0 +1,50 @@
+<ng-include src="'/html/partials/management/menu.html'"></ng-include>
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li class="active"><a href="#/management/season">Správa šampionátu</a> <span class="divider">/</span></li>
+        <li class="active">Jezdci</li>
+    </ul>
+</div>
+
+<div class="span3">
+    <h3>Jezdci</h3>
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th>Jméno</th>
+            <th>Přijmení</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="driver in drivers">
+            <td>{{driver.name}}</td>
+            <td>{{driver.surname}}</td>
+            <td><a class="btn pull-right" ng-click="editDriverClicked(driver)"><i class="icon-edit"></i></a></td>
+        </tr>
+        </tbody>
+    </table>
+    <a class="btn" ng-click="addDriverClicked()"><i class="icon-plus"></i> Přidat</a>
+
+    <div ui-modal class="fade" ng-model="showDriverEdit" id="driverEdit">
+        <div class="modal-body">
+            <form>
+                <fieldset>
+                    <legend>Editace jezdce</legend>
+                    <label>Jméno</label>
+                    <input type="text" ng-model="editedDriver.name"/>
+                    <label>Přijmení</label>
+                    <input type="text" ng-model="editedDriver.surname"/>
+
+
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a class="btn pull-left" ng-show="editedDriver.id" ng-click="deleteDriverClicked()">Smazat</a>
+            <a class="btn btn-primary" ng-click="saveDriverClicked()">Uložit</a>
+            <a class="btn" ng-click="cancelDriverEditClicked()">Zrušit</a>
+        </div>
+    </div>
+</div>

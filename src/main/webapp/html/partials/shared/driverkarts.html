@@ -1,0 +1,94 @@
+<ng-include src="'/html/partials/menu.html'"></ng-include>
+
+<div class="span9">
+
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li>{{race.name}} <span class="divider">/</span></li>
+        <li class="active">Přiřazení kár jezdcům</li>
+    </ul>
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#driverkarts" data-toggle="tab">Přiřazení kár k jezdcům</a></li>
+        <li><a href="#driverschedule" data-toggle="tab">Rozpis</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="driverkarts">
+            <p></p>
+
+            <p>Tým: <select
+                    ng-options="raceAssignment as getTeamLabelForSelect(raceAssignment) for raceAssignment in raceAssignments"
+                    ng-model="raceAssignment"/></p>
+
+            <p>Tým si vylosoval číslo {{raceAssignment.teamCast}}.</p>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Tým</th>
+                    <th>Jezdec</th>
+                    <th>1.jízda</th>
+                    <th>2.jízda</th>
+                    <th ng-show="isQualification">3.jízda</th>
+                    <th ng-show="isQualification">4.jízda</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="teamDriverRound in teamRounds[raceAssignment.team.id]">
+                    <td><p ng-show="$first">{{teamDriverRound[0][0].team.name}}</p></td>
+                    <td>{{teamDriverRound[0][0].driver.name + ' ' + teamDriverRound[0][0].driver.surname}}</td>
+                    <td><select
+                            ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][0]"
+                            ng-model="teamDriverRound[0][0].kart" class="input-mini" tabindex="{{$index}}"/></td>
+                    <td><select
+                            ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][1]"
+                            ng-model="teamDriverRound[1][0].kart" class="input-mini" tabindex="{{$index + 4}}"/></td>
+                    <td ng-show="isQualification"><select
+                            ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][2]"
+                            ng-model="teamDriverRound[2][0].kart" class="input-mini" tabindex="{{$index + 8}}"/></td>
+                    <td ng-show="isQualification"><select
+                            ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][3]"
+                            ng-model="teamDriverRound[3][0].kart" class="input-mini" tabindex="{{$index + 12}}"/></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="driverschedule">
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button ng-click="resultButtonClicked(qualificationRound, race)"
+                            ng-repeat="qualificationRound in qualificationRounds" class="btn"
+                            ng-class="getResultButtonClass(qualificationRound)">{{qualificationRound + 1}}. kvalifikace
+                    </button>
+                </div>
+                <button ng-click="printButtonClicked()" class="btn btn-primary pull-right">Tisk</button>
+            </div>
+            <h3 class="only-print">Rozpis {{selectedResult + 1}}. kvalifikace</h3>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Tým</th>
+                    <th>Jezdec</th>
+                    <th>Motokára</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="raceRidesRound in raceRidesRounds | orderBy:'rideIndex'">
+
+
+                <tr>
+                    <td colspan="3"><h4>Rozjížďka {{raceRidesRound.rideIndex}}</h4></td>
+                </tr>
+                <tr ng-repeat="raceRideRound in raceRidesRound.rounds">
+                    <td>{{raceRideRound.team.name}}</td>
+                    <td>{{raceRideRound.driver.name + ' ' + raceRideRound.driver.surname}}</td>
+                    <td>{{raceRideRound.kart.number}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-primary" ng-click="loadTestData()">Testovací data</button>
+        </div>
+    </div>
+</div>
+
+
+</div>

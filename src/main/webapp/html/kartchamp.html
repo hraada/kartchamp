@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="kartchamp">
+<head>
+    <meta charset="utf-8">
+    <title>Kartchamp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Radim Hradecký">
+
+    <!-- Le styles -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+    </style>
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/css/smoothness/jquery-ui-1.9.2.custom.min.css" rel="stylesheet">
+    <link href="/css/kartchamp.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">-->
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="#">Kartchamp</a>
+
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li><a active-link="active" href="#/dashboard">Dashboard</a></li>
+                    <li><a active-link="active" href="#/management">Správa šampionátu</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <ng-view></ng-view>
+    </div>
+    <!--/row-->
+
+    <hr>
+
+    <footer>
+        <p><a href="http://www.hradecky.org">Radim Hradecký</a>, <a href="http://www.kartrace.cz">Kartrace o.s.</a> 2013
+        </p>
+    </footer>
+
+</div>
+<!--/.fluid-container-->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/js/lib/jquery-1.8.3/jquery-1.8.3.min.js"></script>
+<script src="/js/lib/jquery-ui-1.9.2/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/js/lib/jquery.maskedinput.js"></script>
+<script src="/js/lib/bootbox-3.2.0.min.js"></script>
+<script src="/js/lib/bootstrap-2.2/bootstrap.min.js"></script>
+
+<script src="/js/lib/persistencejs/persistence.js" type="application/javascript"></script>
+<script src="/js/lib/persistencejs/persistence.store.memory.js" type="application/javascript"></script>
+<script src="/js/lib/persistencejs/persistence.store.sql.js" type="application/javascript"></script>
+<script src="/js/lib/persistencejs/persistence.store.sqloverhttp.js" type="application/javascript"></script>
+
+<script src="/js/model/Model.js"></script>
+
+<script src="/js/lib/angular-1.0.3/angular.min.js"></script>
+
+<script src="/js/directive.js"></script>
+<script src="/js/filter.js"></script>
+<script src="/js/service.js"></script>
+<script src="/js/kartchamp.js"></script>
+
+<script src="/js/directives/ActiveLink.js"></script>
+<script src="/js/directives/Date.js"></script>
+<script src="/js/directives/DuplicateTime.js"></script>
+<script src="/js/directives/Mask.js"></script>
+<script src="/js/directives/Modal.js"></script>
+
+<script src="/js/filters/RaceTime.js"></script>
+
+<script src="/js/services/ChallengeService.js"></script>
+<script src="/js/services/DriverService.js"></script>
+<script src="/js/services/ExportService.js"></script>
+<script src="/js/services/FairSprintsService.js"></script>
+<script src="/js/services/IndexerService.js"></script>
+<script src="/js/services/PersistenceService.js"></script>
+<script src="/js/services/QualificationService.js"></script>
+<script src="/js/services/RaceAssignmentService.js"></script>
+<script src="/js/services/RaceService.js"></script>
+<script src="/js/services/RoundService.js"></script>
+<script src="/js/services/SeasonAssignmentService.js"></script>
+<script src="/js/services/SeasonService.js"></script>
+<script src="/js/services/TeamService.js"></script>
+
+<script src="/js/controllers/DashboardController.js"></script>
+<script src="/js/controllers/MenuController.js"></script>
+
+<script src="/js/controllers/shared/DriverKartsController.js"></script>
+<script src="/js/controllers/shared/KartController.js"></script>
+<script src="/js/controllers/shared/NominationController.js"></script>
+<script src="/js/controllers/shared/TeamCastsController.js"></script>
+
+<script src="/js/controllers/qualification/QualificationController.js"></script>
+<script src="/js/controllers/qualification/QualificationResultsController.js"></script>
+
+<script src="/js/controllers/challenge/ChallengeController.js"></script>
+<script src="/js/controllers/challenge/DrawController.js"></script>
+<script src="/js/controllers/challenge/ChallengeResultsController.js"></script>
+
+<script src="/js/controllers/fairsprints/RideAssignmentsController.js"></script>
+<script src="/js/controllers/fairsprints/TeamStartOrderController.js"></script>
+<script src="/js/controllers/fairsprints/FairSprintsController.js"></script>
+<script src="/js/controllers/fairsprints/FairSprintsResultsController.js"></script>
+
+<script src="/js/controllers/management/DriverController.js"></script>
+<script src="/js/controllers/management/ImportExportController.js"></script>
+<script src="/js/controllers/management/SeasonController.js"></script>
+<script src="/js/controllers/management/TeamController.js"></script>
+
+</body>
+</html>

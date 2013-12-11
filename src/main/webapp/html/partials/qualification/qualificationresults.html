@@ -1,0 +1,89 @@
+<ng-include src="'/html/partials/menu.html'"></ng-include>
+
+<div class="span9">
+
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li>{{race.name}} <span class="divider">/</span></li>
+        <li class="active">Celkové výsledky</li>
+    </ul>
+
+    <div class="btn-toolbar">
+        <div class="btn-group pull-right">
+            <button ng-click="printButtonClicked()" class="btn btn-primary">Tisk</button>
+            <button ng-click="exportButtonClicked()" class="btn">Export</button>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#teams" data-toggle="tab">Výsledky týmů</a></li>
+        <li><a href="#drivers" data-toggle="tab">Výsledky jezdců</a></li>
+    </ul>
+
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="teams">
+            <h3 class="only-print">Výsledky týmů</h3>
+            <table class="table table-condensed table-striped">
+                <thead>
+                <tr>
+                    <th>Pořadí</th>
+                    <th>Tým</th>
+                    <th>Kvalifikace 1</th>
+                    <th>Kvalifikace 2</th>
+                    <th>Kvalifikace 3</th>
+                    <th>Kvalifikace 4</th>
+                    <th>Celkem</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="team in results.teams">
+                    <td>{{$index + 1}}</td>
+                    <td>{{team.name}}</td>
+                    <td>{{team.roundTeamPoints[0]}}</td>
+                    <td>{{team.roundTeamPoints[1]}}</td>
+                    <td>{{team.roundTeamPoints[2]}}</td>
+                    <td>{{team.roundTeamPoints[3]}}</td>
+                    <td>{{team.totalTeamPoints}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tab-pane" id="drivers">
+            <h3 class="only-print">Výsledky jezdců</h3>
+            <table class="table table-condensed table-striped">
+                <thead>
+                <tr>
+                    <th>Pořadí</th>
+                    <th>Jezdec</th>
+                    <th>Kvalifikace 1</th>
+                    <th>Kvalifikace 2</th>
+                    <th>Celkem</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="driver in results.drivers">
+                    <td>{{$index + 1}}</td>
+                    <td>{{driver.name}}</td>
+                    <td>{{driver.qualificationPoints[0]}}</td>
+                    <td>{{driver.qualificationPoints[1]}}</td>
+                    <td>{{driver.qualificationPoints[0] + driver.qualificationPoints[1]}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div ui-modal class="fade" ng-model="showExport" id="export">
+            <div class="modal-body">
+                <textarea ng-model="teamResultsExport" rows="8" style="width: 510px"></textarea><br/>
+                <textarea ng-model="driverResultsExport" rows="8" style="width: 510px"></textarea>
+            </div>
+            <div class="modal-footer">
+                <a class="btn" ng-click="exportCancelButtonClicked()">Zrušit</a>
+            </div>
+        </div>
+    </div>
+
+</div>

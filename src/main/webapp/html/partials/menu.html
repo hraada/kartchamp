@@ -1,0 +1,45 @@
+<div class="span3 sidebar" ng-controller="MenuController">
+    <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+            <li class="nav-header">Příprava</li>
+            <li><a active-link="active" href="#/race/{{raceId}}/nomination" ng-click="menuClicked()">Nominace</a></li>
+            <li><a ng-show="isQualification || isChallenge" active-link="active" href="#/race/{{raceId}}/teamcasts" ng-click="menuClicked()">Losování</a></li>
+            <li><a ng-show="isFairSprints" active-link="active" href="#/race/{{raceId}}/teamstartorder" ng-click="menuClicked()">Startovní pořadí</a></li>
+        </ul>
+    </div>
+    <button class="btn btn-block" ng-click="completePreparationClicked()" type="button">Dokončit přípravu</button>
+    <br/><br/>
+
+    <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+            <li class="nav-header">Závod</li>
+            <li><a active-link="active" href="#/race/{{raceId}}/karts" ng-click="menuClicked()">Čísla kár</a></li>
+            <li><a ng-hide="isFairSprints" active-link="active" href="#/race/{{raceId}}/driverkarts" ng-click="menuClicked()">Přiřazení kár jezdcům</a></li>
+            <li><a ng-show="isFairSprints" active-link="active" href="#/race/{{raceId}}/rideassignments" ng-click="menuClicked()">Přiřazení jezdců do jízd</a></li>
+            <li><a ng-show="isQualification || isChallenge" active-link="active"
+                   href="#/race/{{raceId}}/qualification/1" ng-click="menuClicked()">Kvalifikace 1 + 2</a></li>
+            <li><a ng-show="isQualification" active-link="active" href="#/race/{{raceId}}/qualification/2"
+                   ng-click="menuClicked()">Kvalifikace 3 + 4</a></li>
+            <li><a ng-show="isChallenge" active-link="active" href="#/race/{{raceId}}/draw" ng-click="menuClicked()">Rozlosování</a>
+            </li>
+            <li><a ng-show="isChallenge" active-link="active" href="#/race/{{raceId}}/challenge/2"
+                   ng-click="menuClicked()">Závod 1 + 2</a></li>
+            <li><a ng-show="isFairSprints" active-link="active" href="#/race/{{raceId}}/fairsprints/1"
+                   ng-click="menuClicked()">Závod 1. část</a></li>
+            <li><a ng-show="isFairSprints" active-link="active" href="#/race/{{raceId}}/fairsprints/2"
+                   ng-click="menuClicked()">Závod 2. část</a></li>
+
+            <li class="nav-header">Zpracování výsledků</li>
+            <li><a ng-show="isQualification" active-link="active" href="#/race/{{raceId}}/qualificationresults"
+                   ng-click="menuClicked()">Celkové výsledky</a></li>
+            <li><a ng-show="isChallenge" active-link="active" href="#/race/{{raceId}}/challengeresults"
+                   ng-click="menuClicked()">Celkové výsledky</a></li>
+            <li><a ng-show="isFairSprints" active-link="active" href="#/race/{{raceId}}/fairsprintsresults"
+                   ng-click="menuClicked()">Celkové výsledky</a></li>
+
+        </ul>
+    </div>
+    <!--/.well -->
+    <div class="ajax-loader" id="ajax-loader"></div>
+
+</div><!--/span-->

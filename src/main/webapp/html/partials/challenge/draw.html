@@ -1,0 +1,59 @@
+<ng-include src="'/html/partials/menu.html'"></ng-include>
+
+<div class="span9">
+
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">/</span></li>
+        <li>{{race.name}} <span class="divider">/</span></li>
+        <li class="active">Rozlosování závodu</li>
+    </ul>
+
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#draw" data-toggle="tab">Rozlosování</a></li>
+        <li><a href="#driverschedule" data-toggle="tab">Rozpis</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="draw">
+            <p>Kliknutím na rozlosování závodu N se smažou výsledky tohoto závodu, stanoví se do něj startovní pořadí
+                podle odpovídající kvalifikace a rozlosují se motokáry.</p>
+            <button class="btn btn-large btn-primary" ng-click="drawRace(0, 2)">Rozlosovat závod 1</button>
+            <button class="btn btn-large btn-primary" ng-click="drawRace(1, 3)">Rozlosovat závod 2</button>
+
+        </div>
+        <div class="tab-pane" id="driverschedule">
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button ng-click="resultButtonClicked(challengeRound, race)"
+                            ng-repeat="challengeRound in challengeRounds" class="btn"
+                            ng-class="getResultButtonClass(challengeRound)">{{challengeRound - 1}}. závod
+                    </button>
+                </div>
+                <button ng-click="printButtonClicked()" class="btn btn-primary pull-right">Tisk</button>
+            </div>
+            <h3 class="only-print">Rozpis {{selectedResult + 1}}. kvalifikace</h3>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Tým</th>
+                    <th>Jezdec</th>
+                    <th>Motokára</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="raceRidesRound in raceRidesRounds | orderBy:'rideIndex'">
+
+
+                <tr>
+                    <td colspan="3"><h4>Rozjížďka {{raceRidesRound.rideIndex}}</h4></td>
+                </tr>
+                <tr ng-repeat="raceRideRound in raceRidesRound.rounds">
+                    <td>{{raceRideRound.team.name}}</td>
+                    <td>{{raceRideRound.driver.name + ' ' + raceRideRound.driver.surname}}</td>
+                    <td>{{raceRideRound.kart.number}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
