@@ -1,17 +1,17 @@
-Cleverfy application REST server
+Kartchamp
 
-http://www.cleverfy.com
 
-RUNNING THE APPLICATION:
+RUNNING THE APPLICATION FOR DEVELOPMENT:
 
 - Download and install Maven 3 (http://maven.apache.org/download.html#Installation). If you have already installed Maven 3, you can skip this step.
 - Go the root directory of project (The one which contains the pom.xml file)
 - Run command mvn clean jetty:run
 - Start your browser and go to the location: http://localhost:8080
-- H2 administration is available on: http://localhost:8082 (jdbc:h2:mem:datajpa)
+- You will have some default data prepared - let's start playing
 
-RUNNING TESTS:
-
-- You can run unit tests by using this command: mvn test -P dev
-- You can run integration tests by using this command: mvn verify -P integration-test
+CREATING PRODUCTION BUILD:
+- Run command mvn package -P complete-assembly
+- In target folder, find folder kartchamp-build-* and copy it to your installation location
+- After copy, copy data folder from project root to your installation location (data separation)
+- Run start.bat in bin folder and browse to location http://localhost:9000
 
