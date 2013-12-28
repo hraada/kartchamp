@@ -53,11 +53,22 @@ service.factory('fairSprintsService', function (persistenceService) {
                 var totalTeamPoints = {};
                 var totalDriverPoints = {};
                 var roundDriverPoints = {};
+                var teamPlaceCounts = {};
                 
-                var racePoints = [0, 0, 1, 2, 3, 4, 5, 6, 8, 10];
                 angular.forEach(results, function (result) {
-
-                    //Team ride points
+                	//Team place counts (in case of same point sum)
+                	if (teamPlaceCounts[result.team.id] && teamPlaceCounts[result.team.id][result.resultPosition]) {
+                		teamPlaceCounts[result.team.id][result.resultPosition]++;
+                    } else {
+                    	if (teamPlaceCounts[result.team.id]) {
+                        	teamPlaceCounts[result.team.id][result.resultPosition] = 1;
+                    	} else {
+                    		teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        	teamPlaceCounts[result.team.id][result.resultPosition] = 1;	
+                    	}                    	
+                    }
+                	
+                    //Team ride points (1-20)
                     if (rideTeamPoints[result.team.id]) {
                         rideTeamPoints[result.team.id][result.rideIndex] = self.getPoints(result.resultPosition);
                     } else {
@@ -65,7 +76,7 @@ service.factory('fairSprintsService', function (persistenceService) {
                         rideTeamPoints[result.team.id][result.rideIndex] = self.getPoints(result.resultPosition);
                     }
 
-                    //Team round points
+                    //Team round points (0,1)
                     if (roundTeamPoints[result.team.id]) {
                         if (roundTeamPoints[result.team.id][result.roundIndex]) {
                             roundTeamPoints[result.team.id][result.roundIndex] += self.getPoints(result.resultPosition);
@@ -108,7 +119,7 @@ service.factory('fairSprintsService', function (persistenceService) {
 
                 race.raceAssignments.list(function (raceAssignments) {
                     angular.forEach(raceAssignments, function (raceAssignment) {
-                        teams.push({name: raceAssignment.team.name, roundTeamPoints: roundTeamPoints[raceAssignment.team.id], rideTeamPoints: rideTeamPoints[raceAssignment.team.id], totalTeamPoints: totalTeamPoints[raceAssignment.team.id]});
+                        teams.push({name: raceAssignment.team.name, roundTeamPoints: roundTeamPoints[raceAssignment.team.id], rideTeamPoints: rideTeamPoints[raceAssignment.team.id], totalTeamPoints: totalTeamPoints[raceAssignment.team.id], teamPlaceCounts: teamPlaceCounts[raceAssignment.team.id]});
                         drivers.push({name: raceAssignment.driver.name + ' ' + raceAssignment.driver.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver.id]});
                         drivers.push({name: raceAssignment.driver2.name + ' ' + raceAssignment.driver2.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver2.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver2.id]});
                         drivers.push({name: raceAssignment.driver3.name + ' ' + raceAssignment.driver3.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver3.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver3.id]});
@@ -117,7 +128,17 @@ service.factory('fairSprintsService', function (persistenceService) {
                         return b.totalDriverPoints - a.totalDriverPoints;
                     });                    
                     teams.sort(function (a, b) {
-                        return b.totalTeamPoints - a.totalTeamPoints;
+                    	if (b.totalTeamPoints != a.totalTeamPoints) {
+                    		return b.totalTeamPoints - a.totalTeamPoints;	
+                    	} else {
+                    		for (var i = 1; i <= 10; i++) {
+                    			if (b.teamPlaceCounts[i] != a.teamPlaceCounts[i]) {
+                    				return b.teamPlaceCounts[i] - a.teamPlaceCounts[i];
+                    			}                    			
+                    		}
+                    		return 0;
+                    	}
+                        
                     });
                     callback({teams: teams, drivers: drivers});
                 });

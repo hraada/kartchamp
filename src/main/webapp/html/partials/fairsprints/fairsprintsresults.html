@@ -33,6 +33,7 @@
                     <th>1. část</th>
                     <th>2. část</th>
                     <th>Celkem</th>
+                    <th>Počty umístění</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -42,6 +43,9 @@
                     <td>{{teamResult.roundTeamPoints[0]}}</td>
                     <td>{{teamResult.roundTeamPoints[1]}}</td>
                     <td>{{teamResult.totalTeamPoints}}</td>
+                    <td>
+                    	<span ng-repeat="teamPlaceCount in teamResult.teamPlaceCounts">{{teamPlaceCount}} | </span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

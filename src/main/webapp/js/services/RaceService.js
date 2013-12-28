@@ -8,12 +8,20 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
     return {
         /**
          * Retrieves list of all races
+         * @param season of the races to be listed (optional)
          * @param callback, with list of all drivers as param
          */
-        getRaces: function (callback) {
-            Race.all().list(function (races) {
-                callback(races);
-            });
+        getRaces: function (season, callback) {
+        	if (season) {
+                season.races.list(function (races) {
+                    callback(races);
+                });
+        		
+        	} else {
+                Race.all().list(function (races) {
+                    callback(races);
+                });        		
+        	}
         },
         /**
          * Retrieves race for give id

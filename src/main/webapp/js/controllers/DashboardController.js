@@ -2,10 +2,18 @@
 
 /**
  */
-kartchamp.controller('DashboardController', function DashboardController($scope, raceService, $location) {
-    raceService.getRaces(function (races) {
-        $scope.races = races;
-        $scope.$$phase || $scope.$apply();
+kartchamp.controller('DashboardController', function DashboardController($scope, raceService, seasonService, $location) {
+
+	$scope.$watch('selectedSeason', function(selectedSeason) {
+		raceService.getRaces($scope.selectedSeason, function(races) {
+            $scope.races = races;
+            $scope.$$phase || $scope.$apply();
+        });
+	});
+    seasonService.getSeasons(function(seasons) {
+    	$scope.seasons = seasons;
+    	$scope.selectedSeason = seasons[0];    	
+    	$scope.$$phase || $scope.$apply();    	    	
     });
     $scope.raceFormats = raceService.getRaceFormats();
     $scope.editRaceButtonClicked = function (race) {

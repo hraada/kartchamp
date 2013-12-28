@@ -57,15 +57,30 @@ service.factory('qualificationService', function () {
                 var totalTeamPoints = {};
                 var roundDriverPoints = {};
                 var totalDriverPoints = {};
-
+                var teamPlaceCounts = {};
+                
                 var roundPoints = null;
+                var roundPosition;
                 var lastRoundIndex = -1;
                 angular.forEach(results, function (result) {
                     if (lastRoundIndex != result.roundIndex) {
                         lastRoundIndex = result.roundIndex;
                         roundPoints = 30;
                     }
-
+                    roundPosition = 30 - roundPoints + 1;
+                    
+                	//Team place counts (in case of same point sum)
+                	if (teamPlaceCounts[result.team.id] && teamPlaceCounts[result.team.id][roundPosition]) {
+                		teamPlaceCounts[result.team.id][roundPosition]++;
+                    } else {
+                    	if (teamPlaceCounts[result.team.id]) {
+                        	teamPlaceCounts[result.team.id][roundPosition] = 1;
+                    	} else {
+                    		teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        	teamPlaceCounts[result.team.id][roundPosition] = 1;	
+                    	}                    	
+                    }
+                	
                     //Team round points
                     if (roundTeamPoints[result.team.id]) {
                         if (roundTeamPoints[result.team.id][result.roundIndex]) {
@@ -106,7 +121,7 @@ service.factory('qualificationService', function () {
 
                 race.raceAssignments.list(function (raceAssignments) {
                     angular.forEach(raceAssignments, function (raceAssignment) {
-                        teams.push({name: raceAssignment.team.name, roundTeamPoints: roundTeamPoints[raceAssignment.team.id], totalTeamPoints: totalTeamPoints[raceAssignment.team.id]});
+                        teams.push({name: raceAssignment.team.name, roundTeamPoints: roundTeamPoints[raceAssignment.team.id], totalTeamPoints: totalTeamPoints[raceAssignment.team.id], teamPlaceCounts: teamPlaceCounts[raceAssignment.team.id]});
                         drivers.push({name: raceAssignment.driver.name + ' ' + raceAssignment.driver.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver.id]});
                         drivers.push({name: raceAssignment.driver2.name + ' ' + raceAssignment.driver2.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver2.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver2.id]});
                         drivers.push({name: raceAssignment.driver3.name + ' ' + raceAssignment.driver3.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver3.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver3.id]});
@@ -129,7 +144,16 @@ service.factory('qualificationService', function () {
                     });
 
                     teams.sort(function (a, b) {
-                        return b.totalTeamPoints - a.totalTeamPoints;
+                    	if (b.totalTeamPoints != a.totalTeamPoints) {
+                    		return b.totalTeamPoints - a.totalTeamPoints;	
+                    	} else {
+                    		for (var i = 1; i <= 10; i++) {
+                    			if (b.teamPlaceCounts[i] != a.teamPlaceCounts[i]) {
+                    				return b.teamPlaceCounts[i] - a.teamPlaceCounts[i];
+                    			}                    			
+                    		}
+                    		return 0;
+                    	}                 
                     });
                     callback({teams: teams, drivers: drivers});
                 });
