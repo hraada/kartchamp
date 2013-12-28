@@ -1,88 +1,58 @@
 describe("Persistence tests", function () {
     it("initilize connection", function () {
-        persistence.store.websql.config(persistence, 'kartchamp', 'Database for kartchamp application', 20 * 1024 * 1024);
+    	var $injector = angular.injector([ 'service' ]);
+        var raceService = $injector.get('raceService');
+        
+        var drivers = [];
+        var teams = [];
+        
+        for (var i = 0; i < 30; i++) {
+        	drivers[i] = new Driver({name: 'Generated', surname: 'Driver ' + i});
+            persistence.add(drivers[i]);            	
+        }
+        
+        for (var i = 0; i < 10; i++) {
+        	teams[i] = new Team({name: 'Generated team ' + i, shortName: 'GT ' + i, castOrder: i + 1});
+            persistence.add(teams[i]);            	
+        }
+        
+        var season = new Season({name: 'Sezóna 2013', year: 2013});
+        persistence.add(season);
 
-        var Driver = persistence.define('driver', {
-            name: 'TEXT',
-            surname: 'TEXT'
-        });
+        function assignTeam(driver1, driver2, driver3, team) {
+            var seasonAssignment = new SeasonAssignment({driver: driver1, season: season, team: team});
+            persistence.add(seasonAssignment);
+            var seasonAssignment2 = new SeasonAssignment({driver: driver2, season: season, team: team});
+            persistence.add(seasonAssignment2);
+            var seasonAssignment3 = new SeasonAssignment({driver: driver3, season: season, team: team});
+            persistence.add(seasonAssignment3);
+        }
 
-        var Team = persistence.define('team', {
-            name: 'TEXT'
-        });
-
-        var Race = persistence.define('race', {
-            name: 'TEXT',
-            raceDate: 'DATE',
-            raceType: 'TEXT'
-        });
-
-        var Round = persistence.define('round', {
-            type: 'TEXT',
-            result_time: 'INT',
-            result_position: 'INT'
-        });
-
-        var SeasonAssignment = persistence.define('season_assignment', {
-
-        });
-
-        var RaceAssignment = persistence.define('race_assignment', {
-
-        });
-
-        Team.hasMany('seasonAssignments', SeasonAssignment, 'team');
-        Driver.hasMany('seasonAssignments', SeasonAssignment, 'driver');
-
-        persistence.schemaSync();
-
-        /*task.tags.add(tag);
-         tasks.tags.remove(tag);
-         tasks.tags.list(tx, function(allTags) { console.log(allTags); });        */
-
-        /*var team = new Team({name: 'K.R.T. Racing'});
-         persistence.add(team);
-         persistence.flush(function() {
-
-         });         */
-        var team = new Team({name: 'K.R.T. Racing'});
-        persistence.add(team);
+        for (var i = 0; i < 10; i++) {
+        	assignTeam(drivers[i], drivers[i + 10], drivers[i + 20], teams[i]);
+        }
+        
         persistence.flush(function () {
-
-
-            var teams = Team.all().filter('name', '=', 'K.R.T. Racing');
-            teams.list(function (results) {
-                results.forEach(function (team) {
-                    console.log(team.name);
-                    var driver = new Driver({name: 'Radim', surname: 'Hradecký'});
-                    persistence.add(driver);
-                    var driver2 = new Driver({name: 'Pavel', surname: 'Batik'});
-                    persistence.add(driver2);
-                    var driver3 = new Driver({name: 'Richard', surname: 'Tesar'});
-                    persistence.add(driver3);
-
-
-                    var seasonAssignment = new SeasonAssignment({});
-                    var seasonAssignment2 = new SeasonAssignment({});
-                    var seasonAssignment3 = new SeasonAssignment({});
-                    persistence.add(seasonAssignment);
-                    persistence.add(seasonAssignment2);
-                    persistence.add(seasonAssignment3);
-
-                    driver.seasonAssignments.add(seasonAssignment);
-                    driver2.seasonAssignments.add(seasonAssignment2);
-                    driver3.seasonAssignments.add(seasonAssignment3);
-
-
-                    team.seasonAssignments.add(seasonAssignment);
-                    team.seasonAssignments.add(seasonAssignment2);
-                    team.seasonAssignments.add(seasonAssignment3);
-
-                    persistence.flush(function () {
-
-                    });
+        	Team.all().list(function(teams) {
+        		expect(teams.length).toBe(10);
+        	});
+        	Driver.all().list(function(drivers) {
+        		expect(drivers.length).toBe(30);
+        	});
+        	SeasonAssignment.all().list(function(seasonAssignments) {
+        		expect(seasonAssignments.length).toBe(30);
+        	});
+        	/*
+            var race1 = {id: null, name: 'Qualification 1', season: season, raceType: 'qualification', raceDate: new Date()};
+            var race2 = {id: null, name: 'Challenge 1', season: season, raceType: 'challenge', raceDate: new Date()};
+            raceService.save(race1, function () {
+                raceService.save(race2, function () {
+                    persistence.flush();
                 });
-            });
+            });*/
         });
+
+        
+    	//expect(true).toBe(true);
     });
 });

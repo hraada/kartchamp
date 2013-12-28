@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Qualification application module
+ * kartchamp application module
  *
  * @type {angular.Module}
  */
