@@ -93,8 +93,9 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
          * Saves given race into the database (default data for race are created)
          * @param race
          * @param callback, which is called when data are flushed
+         * @param error callback to be called, when something goes wrong
          */
-        save: function (race, callback) {
+        save: function (race, callback, error) {
             if (race.id != null) {
                 Race.load(race.id, function (oldRace) {
                     oldRace.name = race.name;
@@ -112,7 +113,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     persistenceService.flush(function () {
                         if (callback) callback();
                     });
-                });
+                }, error);
 
             }
         },
@@ -120,9 +121,10 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
          * Private method for create default data associated to race
          * @param race
          * @param callback, which is called when data are flushed
+         * @param error callback to be called, when something goes wrong
          * @private
          */
-        _createDefaultRaceData: function (race, callback) {
+        _createDefaultRaceData: function (race, callback, error) {
 
             function addKarts(count, race) {
                 for (var i = 0; i < count; i++) {
@@ -176,22 +178,32 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
             }
 
             seasonAssignmentService.getSeasonAssignments(race.season, function (indexedSeasonAssignments) {
+                var seasonAssignmentsCount = 0;
                 angular.forEach(indexedSeasonAssignments, function (seasonAssignment) {
                     addRaceRounds(race, seasonAssignment[0].team); //It doesnt matter which index...
                     addRaceAssignment(race, seasonAssignment[0].team);
-                });
-                callback();
+                    seasonAssignmentsCount++;
+                });                    
+                if (seasonAssignmentsCount < 10) {
+                    error('Nepodařilo se založit data závodu. Pro založení závodu v sezóně je potřeba mít založené členy všech týmů pro sezónu.');
+                } else {
+                    callback();
+                }                
             })
 
 
         },
         /**
-         * Deletes given race from the database
-         * @param race
+         * Deletes given race and all associated data from the database
+         * @param race to be deleted
          * @param callback, which is called when data are flushed
          */
         delete: function (race, callback) {
             Season.load(race.id, function (oldRace) {
+                oldRace.karts.destroyAll();
+                oldRace.raceAssignments.destroyAll();
+                oldRace.rounds.destroyAll();
+
                 persistenceService.remove(oldRace);
                 persistenceService.flush(function () {
                     if (callback) callback();

@@ -50,13 +50,20 @@ service.factory('seasonService', function (persistenceService) {
          * Deletes given season from the database
          * @param season
          * @param callback, which is called when data are flushed
+         * @param callback, when delete fails
          */
-        delete: function (season, callback) {
+        delete: function (season, callback, error) {
             Season.load(season.id, function (oldSeason) {
-                persistenceService.remove(oldSeason);
-                persistenceService.flush(function () {
-                    if (callback) callback();
-                });
+                oldSeason.races.count(function(raceCount) {
+                    if (raceCount > 0) {
+                        error('Ke smazání sezóny je potřeba smazat všechny její závody.');
+                    } else {
+                        persistenceService.remove(oldSeason);
+                        persistenceService.flush(function () {
+                            if (callback) callback();
+                        });
+                    }
+                })
             });
         }
     };

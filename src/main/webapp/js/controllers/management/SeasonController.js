@@ -41,6 +41,9 @@ kartchamp.controller('SeasonController',
             $scope.showSeasonEdit = false;
             seasonService.delete($scope.editedSeason, function () {
                 $scope.loadSeasons();
+            }, function(message) {
+                bootbox.alert(message);
+                $scope.loadSeasons();
             });
         }
 
@@ -74,6 +77,9 @@ kartchamp.controller('SeasonController',
         $scope.saveRaceClicked = function () {
             raceService.save($scope.editedRace, function () {
                 $scope.showRaceEdit = false;
+                $scope.loadRaces($scope.selectedSeason);
+            }, function(message) {
+                bootbox.alert(message);
                 $scope.loadRaces($scope.selectedSeason);
             });
         }
