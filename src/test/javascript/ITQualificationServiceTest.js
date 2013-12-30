@@ -1,9 +1,11 @@
-describe("Persistence tests", function () {
-    it("initilize connection", function () {
-    	var $injector = angular.injector([ 'service' ]);
+describe("Qualification service", function () {
+	var race = null;
+	
+	beforeEach(function() {
+		var $injector = angular.injector([ 'service' ]);
         var raceService = $injector.get('raceService');
         
-        var drivers = [];
+		var drivers = [];
         var teams = [];
         
         for (var i = 0; i < 30; i++) {
@@ -31,26 +33,32 @@ describe("Persistence tests", function () {
         for (var i = 0; i < 10; i++) {
         	assignTeam(drivers[i], drivers[i + 10], drivers[i + 20], teams[i]);
         }
-        
+
         persistence.flush(function () {
-        	Team.all().list(function(teams) {
-        		expect(teams.length).toBe(10);
-        	});
-        	Driver.all().list(function(drivers) {
-        		expect(drivers.length).toBe(30);
-        	});
-        	SeasonAssignment.all().list(function(seasonAssignments) {
-        		expect(seasonAssignments.length).toBe(30);
-        	});
-        	/*
-            var race1 = {id: null, name: 'Qualification 1', season: season, raceType: 'qualification', raceDate: new Date()};
-            var race2 = {id: null, name: 'Challenge 1', season: season, raceType: 'challenge', raceDate: new Date()};
-            raceService.save(race1, function () {
-                raceService.save(race2, function () {
-                    persistence.flush();
-                });
-            });*/
+        	
+        	race = {name: 'Qualification 1', season: season, raceType: 'qualification', raceDate: new Date()};
+        	raceService.save(race, function (raceEntity) {
+                race = raceEntity;
+            });
+        	
         });
+	});
+	
+    it("should return correct race round results", function () {
+    	
+    	
+    	var $injector = angular.injector([ 'service' ]);    	    	 
+    	var roundService = $injector.get('roundService');
+    	roundService.getRaceRounds(race, [0], function(raceRounds) {
+    		expect(raceRounds.length).toBe(30);
+    		for (var i = 0; i < raceRounds.length; i++) {
+    			var round = raceRounds[i];
+    			round.resultTime = 30 - i;
+    		}
+    	});
+    	
+    	var qualificationService = $injector.get('qualificationService');                        
+        
 
         
     	//expect(true).toBe(true);

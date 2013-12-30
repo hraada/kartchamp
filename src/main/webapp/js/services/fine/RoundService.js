@@ -22,10 +22,10 @@ service.factory('roundService', function (indexerService) {
                     if (callback) {
                         var filteredRounds = [];
                         angular.forEach(rounds, function (round) {
-                            if (round.race.id == race.id) {
+                            if (round.race.id == race.id && roundIndexes.indexOf(round.roundIndex) >= 0) {
                                 filteredRounds.push(round);
                             }
-                        })
+                        });
                         callback(filteredRounds);
                     }
                 });
@@ -39,7 +39,7 @@ service.factory('roundService', function (indexerService) {
          */
         updateRaceAssignments: function (race, raceAssignments, callback) {
             var self = this;
-            var rounds = self.getRaceRounds(race, [0, 1, 2, 3], function (rounds) {
+            self.getRaceRounds(race, [0, 1, 2, 3], function (rounds) {
                 var indexedRounds = indexerService.indexData(rounds, ["team.id", "driverIndex", "roundIndex"]);
 
                 angular.forEach(raceAssignments, function (raceAssignment) {

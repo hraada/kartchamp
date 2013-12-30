@@ -100,7 +100,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
         /**
          * Saves given race into the database (default data for race are created)
          * @param race
-         * @param callback, which is called when data are flushed
+         * @param callback, which is called when data are flushed (entity is passed as param)
          * @param error callback to be called, when something goes wrong
          */
         save: function (race, callback, error) {
@@ -111,7 +111,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     oldRace.raceDate = race.raceDate;
                     oldRace.season = race.season;
                     persistenceService.flush(function () {
-                        if (callback) callback();
+                        if (callback) callback(race);
                     });
                 });
             } else {
@@ -119,7 +119,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 persistenceService.add(race);
                 this._createDefaultRaceData(race, function () {
                     persistenceService.flush(function () {
-                        if (callback) callback();
+                        if (callback) callback(race);
                     });
                 }, error);
 

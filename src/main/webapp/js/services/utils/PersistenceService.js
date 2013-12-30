@@ -4,6 +4,8 @@
  * Service that provides persistence interface (eg. wrapper around persistence js).
  */
 service.factory('persistenceService', function () {
+	
+	//Inmemory database is used in unit tests
     if (persistence.store.sqloverhttp) {
     	persistence.store.sqloverhttp.config(persistence, 'kartchamp', 'Database for kartchamp application', 20 * 1024 * 1024);	
     } else {
