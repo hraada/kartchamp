@@ -12,7 +12,8 @@ service.factory('qualificationService', function () {
             });
         },
         getRaceRoundSchedule: function (race, round, callback) {
-            race.rounds.filter('roundIndex', '==', round).order('roundIndex', true).order('rideIndex').prefetch('kart').list(function (rounds) {
+            //startposition is used to order drivers according to team cast for qualification
+            race.rounds.filter('roundIndex', '==', round).order('roundIndex', true).order('rideIndex').order('startPosition').prefetch('kart').list(function (rounds) {
                 var indexedRounds = {};
 
                 //Grouping

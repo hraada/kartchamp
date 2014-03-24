@@ -42,7 +42,7 @@ var Round = persistence.define('round', {
     type: 'TEXT',
     roundIndex: 'INT', // Races are usually separated into rounds. In general in each round every driver should participate and for each round, results should be possible to made (qualification and challenge have 4 round, fairsprints have 2)
     rideIndex: 'INT', // Because all drivers can not be at the same time on the track, race consist from set of rides (usually 20 for all formats)
-    driverIndex: 'INT', //Originally, this was driver order in ride, but it is not used now
+    driverIndex: 'INT', // Is used to identify team driver index in fair sprints and challenge
     bestTime: 'INT', //Best time for challenge and fair sprints
     resultTime: 'INT', //Time for qualification
     startPosition: 'INT', //Starting position for challenge and fair sprints

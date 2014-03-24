@@ -40,6 +40,11 @@ kartchamp.controller('DriverKartsController',
             });
         }
 
+        $scope.$watch('raceAssignment', function(raceAssignment) {
+            if (raceAssignment) {
+                $scope.drivers = [raceAssignment.driver, raceAssignment.driver2, raceAssignment.driver3];
+            }
+        })
 
         raceService.getRaceById($routeParams.raceId, function (race) {
             $scope.race = race;

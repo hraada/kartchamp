@@ -56,9 +56,11 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 formatList: [
                     {id: 'qualification', label: 'Kvalifikace'},
                     {id: 'challenge', label: 'Challenge'},
-                    {id: 'fairsprints', label: 'Spravedlivé sprinty'}
+                    {id: 'fairsprints', label: 'Spravedlivé sprinty'},
+                    {id: 'fairqualification', label: 'Spravedlivá kvalifikace'},
+                    {id: 'fairchallenge', label: 'Spravedlivý challenge'}
                 ],
-                idToLabel: { qualification: 'Kvalifikace', challenge: 'Challenge', fairsprints: 'Spravedlivé sprinty' }
+                idToLabel: { qualification: 'Kvalifikace', challenge: 'Challenge', fairsprints: 'Spravedlivé sprinty', fairqualification: 'Spravedlivá kvalifikace', fairchallenge: 'Spravedlivý challenge' }
             }
         },
         /**
@@ -67,7 +69,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
          * @return {boolean} true if given race is qualification
          */
         isQualification: function (race) {
-            if (race.raceType == 'qualification') {
+            if (race.raceType == 'qualification' || race.raceType == 'fairqualification') {
                 return true;
             } else {
                 return false;
@@ -79,7 +81,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
          * @return {boolean} true if given race is challenge
          */
         isChallenge: function (race) {
-            if (race.raceType == 'challenge') {
+            if (race.raceType == 'challenge' || race.raceType == 'fairchallenge') {
                 return true;
             } else {
                 return false;
@@ -158,11 +160,11 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
             }
 
             function addRaceRounds(race, team) {
-                if (race.raceType == 'qualification') {
+                if (race.raceType == 'qualification' || race.raceType == 'fairqualification') {
                     for (var i = 0; i < 4; i++) {
                         addRounds(team, i, 'qualification', 0, 3, false);
                     }
-                } else if (race.raceType == 'challenge') {
+                } else if (race.raceType == 'challenge' || race.raceType == 'fairchallenge') {
                     addRounds(team, 0, 'qualification', 0, 3, false);
                     addRounds(team, 1, 'qualification', 0, 3, false);
                     addRounds(team, 2, 'race', 0, 3, false);

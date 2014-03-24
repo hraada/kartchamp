@@ -7,14 +7,19 @@
         <li>{{race.name}} <span class="divider">/</span></li>
         <li class="active">Přiřazení kár jezdcům</li>
     </ul>
-
+{{race.raceType}}
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#driverkarts" data-toggle="tab">Přiřazení kár k jezdcům</a></li>
-        <li><a href="#driverschedule" data-toggle="tab">Rozpis</a></li>
+        <li class="active">
+            <a href="#driverkarts" data-toggle="tab">Přiřazení kár k jezdcům</a>
+        </li>
+        <li>
+            <a href="#driverschedule" data-toggle="tab">Rozpis</a>
+        </li>
     </ul>
 
     <div class="tab-content">
         <div class="tab-pane active" id="driverkarts">
+            <div ng-show="race.raceType == 'qualification' || race.raceType == 'challenge'">
             <p></p>
 
             <p>Tým: <select
@@ -52,7 +57,49 @@
                 </tr>
                 </tbody>
             </table>
+            </div>
+            <div ng-show="race.raceType == 'fairqualification' || race.raceType == 'fairchallenge'">
+            <p>Tým: <select
+                    ng-options="raceAssignment as getTeamLabelForSelect(raceAssignment) for raceAssignment in raceAssignments"
+                    ng-model="raceAssignment"/></p>
+
+            <p>Tým si vylosoval číslo {{raceAssignment.teamCast}}.</p>
+
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button ng-click="resultButtonClicked(qualificationRound, race)"
+                            ng-repeat="qualificationRound in qualificationRounds" class="btn"
+                            ng-class="getResultButtonClass(qualificationRound)">{{qualificationRound + 1}}. kvalifikace
+                    </button>
+                </div>
+            </div>
+            <h3 class="only-print">Rozpis {{selectedResult + 1}}. kvalifikace</h3>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Tým</th>
+                    <th>Jezdec</th>
+                    <th>Motokára</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="raceRidesRound in raceRidesRounds | orderBy:['rideIndex', 'startPosition']">
+
+
+                <tr>
+                    <td colspan="3"><h4>Rozjížďka {{raceRidesRound.rideIndex}}</h4></td>
+                </tr>
+                <tr ng-repeat="raceRideRound in raceRidesRound.rounds" ng-show="raceAssignment.team.id == raceRideRound.team.id">
+                    <td>{{raceRideRound.team.name}}</td>
+                    <td>
+                        <select ng-options="driver as driver.name + ' ' + driver.surname for driver in drivers" ng-model="raceRideRound.driver"></select>
+                    </td>
+                    <td>{{raceRideRound.kart.number}}</td>
+                </tr>
+                </tbody>
+            </table>                
+            </div>            
         </div>
+
         <div class="tab-pane" id="driverschedule">
             <div class="btn-toolbar">
                 <div class="btn-group">
@@ -72,20 +119,19 @@
                     <th>Motokára</th>
                 </tr>
                 </thead>
-                <tbody ng-repeat="raceRidesRound in raceRidesRounds | orderBy:'rideIndex'">
+                <tbody ng-repeat="raceRidesRound in raceRidesRounds | orderBy:['rideIndex', 'startPosition']">
 
 
                 <tr>
                     <td colspan="3"><h4>Rozjížďka {{raceRidesRound.rideIndex}}</h4></td>
                 </tr>
                 <tr ng-repeat="raceRideRound in raceRidesRound.rounds">
-                    <td>{{raceRideRound.team.name}}</td>
+                    <td>{{raceRideRound.team.name}} {{raceRideRound.startPosition}}</td>
                     <td>{{raceRideRound.driver.name + ' ' + raceRideRound.driver.surname}}</td>
                     <td>{{raceRideRound.kart.number}}</td>
                 </tr>
                 </tbody>
-            </table>
-            <!-- <button class="btn btn-primary" ng-click="loadTestData()">Testovací data</button> -->
+            </table>            
         </div>
     </div>
 </div>
