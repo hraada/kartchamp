@@ -7,7 +7,6 @@
         <li>{{race.name}} <span class="divider">/</span></li>
         <li class="active">Přiřazení kár jezdcům</li>
     </ul>
-{{race.raceType}}
     <ul class="nav nav-tabs">
         <li class="active">
             <a href="#driverkarts" data-toggle="tab">Přiřazení kár k jezdcům</a>
@@ -126,7 +125,7 @@
                     <td colspan="3"><h4>Rozjížďka {{raceRidesRound.rideIndex}}</h4></td>
                 </tr>
                 <tr ng-repeat="raceRideRound in raceRidesRound.rounds">
-                    <td>{{raceRideRound.team.name}} {{raceRideRound.startPosition}}</td>
+                    <td>{{raceRideRound.team.name}}</td>
                     <td>{{raceRideRound.driver.name + ' ' + raceRideRound.driver.surname}}</td>
                     <td>{{raceRideRound.kart.number}}</td>
                 </tr>

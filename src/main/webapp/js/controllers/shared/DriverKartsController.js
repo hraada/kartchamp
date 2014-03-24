@@ -9,7 +9,7 @@ kartchamp.controller('DriverKartsController',
         $scope.getTeamLabelForSelect = function (raceAssignment) {
             var teamName = raceAssignment.team.name;
 
-            if ($scope.teamRounds) {
+            if ($scope.teamRounds && ($scope.race.raceType == 'challenge' || $scope.race.raceType == 'qualification')) {
                 if ($scope.teamRounds[raceAssignment.team.id][0][0] && $scope.teamRounds[raceAssignment.team.id][0][0][0].kart) {
                     teamName = teamName + '*';
                 }
@@ -17,6 +17,14 @@ kartchamp.controller('DriverKartsController',
                     teamName = teamName + '*';
                 }
             }
+            if ($scope.teamRounds && ($scope.race.raceType == 'fairchallenge' || $scope.race.raceType == 'fairqualification')) {
+                if ($scope.teamRounds[raceAssignment.team.id][0][0] && $scope.teamRounds[raceAssignment.team.id][0][0][0].driver) {
+                    teamName = teamName + '*';
+                }
+                if ($scope.teamRounds[raceAssignment.team.id][0][2] && $scope.teamRounds[raceAssignment.team.id][0][2][0].driver) {
+                    teamName = teamName + '*';
+                }
+            }            
             return teamName;
         }
 
