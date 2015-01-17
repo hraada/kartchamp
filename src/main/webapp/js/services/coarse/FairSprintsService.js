@@ -6,7 +6,7 @@
 service.factory('fairSprintsService', function (persistenceService) {
 
     return {
-        fairSprintsPoints: [undefined, 10, 8, 6, 5, 4, 3, 2, 1, 0, 0],
+        fairSprintsPoints: [undefined, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1],
 
         getFairSprintsRoundResults: function (race, roundIndex, callback) {
             race.rounds.filter('roundIndex', '=', roundIndex).order('rideIndex', true).order('resultPosition', true).list(function (results) {
