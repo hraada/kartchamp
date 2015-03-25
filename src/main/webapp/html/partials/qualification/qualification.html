@@ -27,6 +27,11 @@
                             ng-class="getRideButtonClass(ride.id)">{{ride.label}}
                     </button>
                 </div>
+                <div class="btn-group">
+                    <button ng-repeat="ride in rideFilterList3" ng-click="rideButtonClicked(ride.id)" class="btn"
+                            ng-class="getRideButtonClass(ride.id)">{{ride.label}}
+                    </button>
+                </div>                
             </div>
             <form name="form" class="css-form" novalidate>
 

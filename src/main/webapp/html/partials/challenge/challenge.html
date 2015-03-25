@@ -27,6 +27,11 @@
                             ng-class="getRideButtonClass(ride.id)">{{ride.label}}
                     </button>
                 </div>
+                <div class="btn-group">
+                    <button ng-repeat="ride in rideFilterList3" ng-click="rideButtonClicked(ride.id)" class="btn"
+                            ng-class="getRideButtonClass(ride.id)">{{ride.label}}
+                    </button>    
+                </div>        
             </div>
             <form name="form" class="css-form" novalidate>
 
@@ -62,7 +67,7 @@
                 <div class="btn-group">
                     <button ng-click="resultButtonClicked(challengeRound, race)"
                             ng-repeat="challengeRound in challengeRounds" class="btn"
-                            ng-class="getResultButtonClass(challengeRound)">{{challengeRound - 1}}. závod
+                            ng-class="getResultButtonClass(challengeRound)">{{$index + 1}}. závod
                     </button>
                 </div>
                 <div class="btn-group pull-right">

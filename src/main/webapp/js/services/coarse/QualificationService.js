@@ -33,6 +33,19 @@ service.factory('qualificationService', function () {
                 callback(arrRounds);
             });
         },
+        getRaceAssignmentsRoundsKartsChallenge3x10: function(rounds, raceAssignments, karts) {
+            var roundsTeamKarts = {}; 
+
+            angular.forEach(raceAssignments, function (raceAssignment) {
+                roundsTeamKarts[raceAssignment.id] = {};
+                angular.forEach(rounds, function (round) {
+                    var cast = raceAssignment.teamCast;
+                    roundsTeamKarts[raceAssignment.id][round] = karts[(cast + round * 3) % 10];                    
+                });
+            });            
+
+            return roundsTeamKarts;           
+        },
         getRaceAssignmentsRoundsKarts: function (rounds, raceAssignments, karts) {
             var upperKarts = karts.slice(0, 3);
             var lowerKarts = karts.slice(3, 6);

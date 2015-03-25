@@ -11,7 +11,8 @@ kartchamp.controller('MenuController',
                 $scope.race = race;
                 $scope.isQualification = raceService.isQualification($scope.race);
                 $scope.isChallenge = raceService.isChallenge($scope.race);
-                $scope.isFairSprints = raceService.isFairSprints($scope.race);
+                $scope.isChallenge3x10 = raceService.isChallenge3x10($scope.race);
+                $scope.isFairSprints = raceService.isFairSprints($scope.race);                
                 $scope.$$phase || $scope.$apply();
             });
         }

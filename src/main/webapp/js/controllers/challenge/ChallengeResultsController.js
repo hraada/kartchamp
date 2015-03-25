@@ -10,8 +10,8 @@ kartchamp.controller('ChallengeResultsController', function ChallengeResultsCont
     }
 
     $scope.exportButtonClicked = function () {
-        $scope.teamResultsExport = exportService.getTeamChallengeResultsAsHtml($scope.results.teams, 'challenge');
-        $scope.driverResultsExport = exportService.getDriverChallengeResultsAsHtml($scope.results.drivers, 'challenge');
+        $scope.teamResultsExport = exportService.getTeamChallengeResultsAsHtml($scope.results.teams, $scope.race.raceType);
+        $scope.driverResultsExport = exportService.getDriverChallengeResultsAsHtml($scope.results.drivers, $scope.race.raceType);
         $scope.showExport = true;
     }
 

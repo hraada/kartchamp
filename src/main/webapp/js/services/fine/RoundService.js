@@ -39,12 +39,34 @@ service.factory('roundService', function (indexerService, raceService) {
          */
         updateRaceAssignments: function (race, raceAssignments, callback) {
             var self = this;
-            self.getRaceRounds(race, [0, 1, 2, 3], function (rounds) {
+            var qualRounds = []; 
+            if (race.raceType == "challenge3x10") {
+                qualRounds = [0, 1, 2];
+            } else if (race.raceType == "qualification" || race.raceType == "fairqualification") {
+                qualRounds = [0, 1, 2, 3];
+            } else {
+                qualRounds = [0, 1];
+            }
+            self.getRaceRounds(race, qualRounds, function (rounds) {
             raceService.getRaceKarts(race, function (karts) {
                 var indexedRounds = indexerService.indexData(rounds, ["team.id", "driverIndex", "roundIndex"]);
 
                 angular.forEach(raceAssignments, function (raceAssignment) {
-                    for (var i = 0; i < 4; i++) {
+                    for (var i = 0; i < qualRounds.length; i++) {
+                        if (race.raceType == "challenge3x10") {
+                            indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = 1 + 3 * i;
+                            indexedRounds[raceAssignment.team.id][0][i][0].startPosition = raceAssignment.teamCast;
+                            indexedRounds[raceAssignment.team.id][0][i][0].kart = karts[(raceAssignment.teamCast + (i * 3) - 1) % 10];
+
+                            indexedRounds[raceAssignment.team.id][1][i][0].rideIndex = 2 + (3 * i);
+                            indexedRounds[raceAssignment.team.id][1][i][0].startPosition = raceAssignment.teamCast;
+                            indexedRounds[raceAssignment.team.id][1][i][0].kart = karts[(raceAssignment.teamCast + 1 + (i * 3) - 1) % 10];
+                            
+                            indexedRounds[raceAssignment.team.id][2][i][0].rideIndex = 3 + (3 * i); 
+                            indexedRounds[raceAssignment.team.id][2][i][0].startPosition = raceAssignment.teamCast;
+                            indexedRounds[raceAssignment.team.id][2][i][0].kart = karts[(raceAssignment.teamCast + 2 + (i * 3) - 1) % 10];
+
+                        }
                         if (race.raceType == "qualification" || race.raceType == "challenge") {
                             indexedRounds[raceAssignment.team.id][0][i][0].driver = raceAssignment.driver;
                             indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / 2) + (5 * i));

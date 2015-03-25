@@ -56,11 +56,12 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 formatList: [
                     {id: 'qualification', label: 'Kvalifikace'},
                     {id: 'challenge', label: 'Challenge'},
+                    {id: 'challenge3x10', label: 'Challenge 3x10'},
                     {id: 'fairsprints', label: 'Spravedlivé sprinty'},
                     {id: 'fairqualification', label: 'Spravedlivá kvalifikace'},
                     {id: 'fairchallenge', label: 'Spravedlivý challenge'}
                 ],
-                idToLabel: { qualification: 'Kvalifikace', challenge: 'Challenge', fairsprints: 'Spravedlivé sprinty', fairqualification: 'Spravedlivá kvalifikace', fairchallenge: 'Spravedlivý challenge' }
+                idToLabel: { qualification: 'Kvalifikace', challenge: 'Challenge', challenge3x10: 'Challenge 3x10', fairsprints: 'Spravedlivé sprinty', fairqualification: 'Spravedlivá kvalifikace', fairchallenge: 'Spravedlivý challenge' }
             }
         },
         /**
@@ -87,6 +88,18 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 return false;
             }
         },
+        /**
+         * Returns true, if given race is challenge
+         * @param race
+         * @return {boolean} true if given race is challenge
+         */
+        isChallenge3x10: function (race) {
+            if (race.raceType == 'challenge3x10') {
+                return true;
+            } else {
+                return false;
+            }
+        },        
         /**
          * Returns true, if given race is fair sprints
          * @param race
@@ -144,12 +157,12 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 }
             }
 
-            function addRounds(team, roundIndex, type, roundStart, roundCount, writeRideIndex) {
-                for (var i = roundStart; i < roundCount; i++) {
+            function addTeamRounds(team, roundIndex, type, driverIndexStart, driverIndexEnd, writeRideIndex) {
+                for (var driverIndex = driverIndexStart; driverIndex < driverIndexEnd; driverIndex++) {
 
-                    var round = new Round({type: type, roundIndex: roundIndex, driverIndex: i, time: 0, startPosition: 0, resultPosition: 0});
+                    var round = new Round({type: type, roundIndex: roundIndex, driverIndex: driverIndex, time: 0, startPosition: 0, resultPosition: 0});
                     if (writeRideIndex) {   //fair sprints know ride index without casting
-                        round.rideIndex = i + 1;
+                        round.rideIndex = driverIndex + 1;
                     }
                     round.race = race;
                     round.team = team;
@@ -159,19 +172,26 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 }
             }
 
-            function addRaceRounds(race, team) {
+            function addTeamRaceRounds(race, team) {
                 if (race.raceType == 'qualification' || race.raceType == 'fairqualification') {
                     for (var i = 0; i < 4; i++) {
-                        addRounds(team, i, 'qualification', 0, 3, false);
+                        addTeamRounds(team, i, 'qualification', 0, 3, false);
                     }
                 } else if (race.raceType == 'challenge' || race.raceType == 'fairchallenge') {
-                    addRounds(team, 0, 'qualification', 0, 3, false);
-                    addRounds(team, 1, 'qualification', 0, 3, false);
-                    addRounds(team, 2, 'race', 0, 3, false);
-                    addRounds(team, 3, 'race', 0, 3, false);
+                    addTeamRounds(team, 0, 'qualification', 0, 3, false);
+                    addTeamRounds(team, 1, 'qualification', 0, 3, false);
+                    addTeamRounds(team, 2, 'race', 0, 3, false);
+                    addTeamRounds(team, 3, 'race', 0, 3, false);
                 } else if (race.raceType == 'fairsprints') {
-                    addRounds(team, 0, 'race', 0, 10, true);
-                    addRounds(team, 1, 'race', 10, 20, true);
+                    addTeamRounds(team, 0, 'race', 0, 10, true);
+                    addTeamRounds(team, 1, 'race', 10, 20, true);
+                } else if (race.raceType == 'challenge3x10') {
+                    addTeamRounds(team, 0, 'qualification', 0, 3, false);
+                    addTeamRounds(team, 1, 'qualification', 0, 3, false);
+                    addTeamRounds(team, 2, 'qualification', 0, 3, false);
+                    addTeamRounds(team, 3, 'race', 0, 3, false);
+                    addTeamRounds(team, 4, 'race', 0, 3, false);
+                    addTeamRounds(team, 5, 'race', 0, 3, false);
                 }
 
             }
@@ -181,7 +201,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 persistenceService.add(raceAssignment);
             }
 
-            if (race.raceType == 'fairsprints') {
+            if (race.raceType == 'fairsprints' || race.raceType == 'challenge3x10') {
                 addKarts(10, race);
             } else {
                 addKarts(6, race);
@@ -190,7 +210,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
             seasonAssignmentService.getSeasonAssignments(race.season, function (indexedSeasonAssignments) {
                 var seasonAssignmentsCount = 0;
                 angular.forEach(indexedSeasonAssignments, function (seasonAssignment) {
-                    addRaceRounds(race, seasonAssignment[0].team); //It doesnt matter which index...
+                    addTeamRaceRounds(race, seasonAssignment[0].team); //It doesnt matter which index...
                     addRaceAssignment(race, seasonAssignment[0].team);
                     seasonAssignmentsCount++;
                 });                    

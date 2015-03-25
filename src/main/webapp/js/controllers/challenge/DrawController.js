@@ -3,11 +3,18 @@
 /**
  * Controller for handling of assigning drivers to karts and rounds accrording to qualification results
  */
-kartchamp.controller('DrawController',
+ kartchamp.controller('DrawController',
     function DrawController($scope, $routeParams, raceService, raceAssignmentService, roundService, qualificationService, challengeService) {
 
         raceService.getRaceById($routeParams.raceId, function (race) {
             $scope.race = race;
+
+            if ($scope.race.raceType != 'challenge3x10') {
+                $scope.challengeRounds = [2, 3];
+            } else {
+                $scope.challengeRounds = [3, 4, 5];
+            }            
+
             $scope.$$phase || $scope.$apply();
         });
 
@@ -42,6 +49,6 @@ kartchamp.controller('DrawController',
 
         }
 
-        $scope.challengeRounds = [2, 3];
+        
     }
-);
+    );

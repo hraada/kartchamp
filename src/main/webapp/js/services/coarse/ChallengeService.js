@@ -7,7 +7,7 @@ service.factory('challengeService', function (persistenceService) {
 
     return {
         getChallengeRoundResults: function (race, roundIndex, callback) {
-            race.rounds.filter('roundIndex', '=', roundIndex).order('rideIndex', true).order('resultPosition', true).list(function (results) {
+            race.rounds.filter('roundIndex', '=', roundIndex).order('rideIndex', true).order('resultPosition', true).prefetch('kart').list(function (results) {
                 callback(results);
             });
         },
@@ -59,12 +59,23 @@ service.factory('challengeService', function (persistenceService) {
 
             persistenceService.flush(function () {
                 race.karts.list(function (karts) {
-                    for (var i = 0; i < 5; i++) {
-                        var randomKarts = self.shuffleArray(karts);
-                        for (var j = 0; j < 6; j++) {
-                            var result = qualificationResults[i * 6 + j];
-                            self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * 5 + i + 1, j + 1);
+
+                    if (race.raceType != 'challenge3x10') {
+                        for (var i = 0; i < 5; i++) {
+                            var randomKarts = self.shuffleArray(karts);
+                            for (var j = 0; j < 6; j++) {
+                                var result = qualificationResults[i * 6 + j];
+                                self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * 5 + i + 1, j + 1);
+                            }
                         }
+                    } else {
+                        for (var i = 0; i < 3; i++) {
+                            var randomKarts = self.shuffleArray(karts);
+                            for (var j = 0; j < 10; j++) {
+                                var result = qualificationResults[i * 10 + j];
+                                self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * 3 + i + 1, j + 1);
+                            }
+                        }                        
                     }
                     persistenceService.flush(function () {
                         callback();

@@ -33,7 +33,7 @@
                     <th>Jezdec</th>
                     <th>1.jízda</th>
                     <th>2.jízda</th>
-                    <th ng-show="isQualification">3.jízda</th>
+                    <th ng-show="isQualification || is3x10Challenge">3.jízda</th>
                     <th ng-show="isQualification">4.jízda</th>
                 </tr>
                 </thead>
@@ -41,23 +41,31 @@
                 <tr ng-repeat="teamDriverRound in teamRounds[raceAssignment.team.id]">
                     <td><p ng-show="$first">{{teamDriverRound[0][0].team.name}}</p></td>
                     <td>{{teamDriverRound[0][0].driver.name + ' ' + teamDriverRound[0][0].driver.surname}}</td>
-                    <td><select
+                    <td>
+                        <select
                             ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][0]"
-                            ng-model="teamDriverRound[0][0].kart" class="input-mini" tabindex="{{$index}}"/></td>
-                    <td><select
+                            ng-model="teamDriverRound[0][0].kart" class="input-mini" tabindex="{{$index}}"/>
+                    </td>
+                    <td>
+                        <select
                             ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][1]"
-                            ng-model="teamDriverRound[1][0].kart" class="input-mini" tabindex="{{$index + 4}}"/></td>
-                    <td ng-show="isQualification"><select
+                            ng-model="teamDriverRound[1][0].kart" class="input-mini" tabindex="{{$index + 4}}"/>
+                    </td>
+                    <td ng-show="isQualification || is3x10Challenge">
+                        <select
                             ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][2]"
-                            ng-model="teamDriverRound[2][0].kart" class="input-mini" tabindex="{{$index + 8}}"/></td>
-                    <td ng-show="isQualification"><select
+                            ng-model="teamDriverRound[2][0].kart" class="input-mini" tabindex="{{$index + 8}}"/>
+                    </td>
+                    <td ng-show="isQualification">
+                        <select
                             ng-options="kart as kart.number for kart in raceAssignmentsRoundsKarts[raceAssignment.id][3]"
-                            ng-model="teamDriverRound[3][0].kart" class="input-mini" tabindex="{{$index + 12}}"/></td>
+                            ng-model="teamDriverRound[3][0].kart" class="input-mini" tabindex="{{$index + 12}}"/>
+                    </td>
                 </tr>
                 </tbody>
             </table>
             </div>
-            <div ng-show="race.raceType == 'fairqualification' || race.raceType == 'fairchallenge'">
+            <div ng-show="race.raceType == 'fairqualification' || race.raceType == 'fairchallenge' || race.raceType == 'challenge3x10'">
             <p>Tým: <select
                     ng-options="raceAssignment as getTeamLabelForSelect(raceAssignment) for raceAssignment in raceAssignments"
                     ng-model="raceAssignment"/></p>
