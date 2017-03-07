@@ -1,25 +1,42 @@
 package cz.kartrace.kartchamp.domain;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparingInt;
 
 /**
  * @author hradecky
  */
 public class TestData {
 
-    public static final List<Team> TEAM_10_ORDER = new ArrayList<>();
-    public static final Set<Team> TEAMS_10 = new HashSet<>();
 
-
-    static {
-        for (int i = 0; i < 10; i++) {
-            Team team = new Team("Kart Racing Team " + i, "K.R.T.", i + 1);
-            TEAMS_10.add(team);
-            TEAM_10_ORDER.add(team);
+    public static Set<Team> getTeams(int teamCount) {
+        Set<Team> teams = new HashSet<>();
+        for (int i = 0; i < teamCount; i++) {
+            Team team = new Team("Kart Racing Team " + i, "K.R.T. " + i, i);
+            teams.add(team);
         }
-
+        return teams;
     }
+
+    public static Set<Driver> getDrivers(int teamCount, int teamSize) {
+        Set<Driver> drivers = new HashSet<>();
+        for (int i = 0; i < teamCount * teamSize; i++) {
+            Driver driver = new Driver("Franta", "Bednář " + i);
+            drivers.add(driver);
+        }
+        return drivers;
+    }
+
+
+    public static List<Team> getReverseTeamOrder(Set<Team> teams) {
+        List<Team> teamOrder = teams.stream().collect(Collectors.toList());
+        teamOrder.sort(comparingInt(Team::getCastOrder));
+        //Collections.reverse(teamOrder);
+        return teamOrder;
+    }
+
 }

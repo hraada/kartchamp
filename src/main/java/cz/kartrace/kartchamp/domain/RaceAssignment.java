@@ -8,31 +8,32 @@ import java.util.UUID;
 /**
  * @author hradecky
  */
-public class Driver {
+public class RaceAssignment {
     private String id = UUID.randomUUID().toString();
-    private String name;
-    private String surname;
-
-    public Driver(String name, String surname) {
-        this.name = name;
-        this.surname = surname;
-    }
+    private Team team;
+    private Driver driver;
+    private int order;
 
     public String getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public Team getTeam() {
+        return team;
     }
 
-    public String getSurname() {
-        return surname;
+    public Driver getDriver() {
+        return driver;
     }
 
-    @Override
-    public String toString() {
-        return String.format("Driver: { Id: %s, Name: %s, Surname: %s}", getId(), getName(), getSurname());
+    public int getOrder() {
+        return order;
+    }
+
+    public void assign(Team team, Driver driver, int order) {
+        this.team = team;
+        this.driver = driver;
+        this.order = order;
     }
 
     @Override

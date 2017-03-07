@@ -1,5 +1,8 @@
 package cz.kartrace.kartchamp.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.UUID;
 
 /**
@@ -8,27 +11,38 @@ import java.util.UUID;
 public class Kart {
     private String id = UUID.randomUUID().toString();
     private String number;
-    private int order;
+    private int order;      // 0-based, ordering of the kart (useful mainly for predictable order in fair sprints and fair qualification)
 
-    public Kart(String number, int order) {
+    public Kart(int order, String number) {
+        this.order = order;
         this.number = number;
-        this.order = order;
-    }
-
-    public Kart(int order) {
-        this.number = String.valueOf(order);
-        this.order = order;
     }
 
     public String getId() {
         return id;
     }
 
+    public int getOrder() {
+        return order;
+    }
+
     public String getNumber() {
         return number;
     }
 
-    public int getOrder() {
-        return order;
+    @Override
+    public String toString() {
+        return String.format("Kart: { Id: %s, Order: %d, Number: %s}", getId(), getOrder(), getNumber());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
 }
