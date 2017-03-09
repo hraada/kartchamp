@@ -48,7 +48,7 @@ public class Race {
                 for (int i = startPosition; i < startPosition + kartRideCount; i++) {
                     int position = i + 1;
                     int points = getScoring().getPointsForPosition(position);
-                    Race.KartRide kartRide = sortedKartRides.get(i);
+                    Race.KartRide kartRide = sortedKartRides.get(i - startPosition);
                     resultList.addResult(new ResultList.Result<>(kartRide, position, points));
                 }
 

@@ -2,10 +2,8 @@ package cz.kartrace.kartchamp.domain;
 
 import cz.kartrace.kartchamp.domain.races.BaseRace;
 import cz.kartrace.kartchamp.domain.races.FairChallenge;
-import cz.kartrace.kartchamp.domain.races.FairQualification;
 import cz.kartrace.kartchamp.domain.rounds.BaseKartRide;
 import cz.kartrace.kartchamp.domain.rounds.BaseRide;
-import cz.kartrace.kartchamp.domain.rounds.Qualification;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -14,9 +12,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -33,20 +29,22 @@ public class ITFairChallengeTest {
     private int teamSize;
     private int kartCount;
 
-    public ITFairChallengeTest(FairChallenge race) {
+    public ITFairChallengeTest(String formatCode) {
+        this.race = (FairChallenge) BaseRace.getRaceByFormatCode(formatCode, "Test Challenge", new Date());
         this.teams = TestData.getTeams(race.getTeamCount());
         this.teamDriverMap = TestData.getDrivers(teams, race.getTeamSize());
         this.teamOrder = TestData.getTeamOrder(teams);
-        this.race = race;
         this.teamCount = race.getTeamCount();
         this.teamSize = race.getTeamSize();
         this.kartCount = race.getKarts().size();
     }
 
-
-    @Parameterized.Parameters(name = "{0} teams")
+    @Parameterized.Parameters(name = "{0}")
     public static Iterable<? extends Object> data() {
-        return Arrays.asList(new Object[] {BaseRace.getRaceByFormatCode("fair-challenge:qualiRoundCount=2,teamCount=10,teamSize=3,kartCount=6,scoring=incremental 1-based", "Test Challenge", new Date()) });
+        return Arrays.asList("fair-challenge:qualiRoundCount=2,teamCount=10,teamSize=3,kartCount=6,scoring=incremental 1-based",
+                "fair-challenge:qualiRoundCount=2,teamCount=10,teamSize=3,kartCount=10,scoring=incremental 1-based",
+                "fair-challenge:qualiRoundCount=2,teamCount=12,teamSize=3,kartCount=6,scoring=incremental 1-based",
+                "fair-challenge:qualiRoundCount=2,teamCount=12,teamSize=3,kartCount=12,scoring=incremental 1-based");
     }
 
     @Test
@@ -87,11 +85,11 @@ public class ITFairChallengeTest {
             });
         });
 
+
         //Move from qualification to race
         race.getRaceRounds().forEach(raceRound -> {
             race.assignToKartRidesBasedOnQualification(raceRound);
         });
-
 
         //All races finish on same positions as they start on
         race.getRaceRounds().forEach(round -> {
@@ -102,16 +100,14 @@ public class ITFairChallengeTest {
             });
         });
 
-        /*
         //Check overall team results
         race.getOverallRaceResults().forEachTeamResult((overAllPosition, result) -> {
             assertThat(overAllPosition, is(equalTo(teamOrder.indexOf(result.getEntity()) + 1)));
             assertThat(result.getEntity().getShortName(), containsString(String.valueOf(overAllPosition - 1)));
 
-            int expectedTeamPoints = (race.getScoring().getPointsForPosition((overAllPosition - 1)  * teamSize + 1) * teamSize - teamSize) * race.getRounds().size();
+            int expectedTeamPoints = (race.getScoring().getPointsForPosition((overAllPosition - 1)  * teamSize + 1) * teamSize - teamSize) * race.getRaceRounds().size();
             assertThat(result.getPoints(), is(equalTo(expectedTeamPoints)));
         });
-
         //Check overall driver results
         race.getOverallRaceResults().forEachDriverResult((overAllPosition, result) -> {
             int oddRideCount = teamCount % teamSize;
@@ -123,8 +119,8 @@ public class ITFairChallengeTest {
                     }
                 }
             }
-            assertThat(result.getPoints(), is(equalTo(race.getScoring().getPointsForPosition(overAllPosition) * race.getRounds().size())));
-        });*/
+            assertThat(result.getPoints(), is(equalTo(race.getScoring().getPointsForPosition(overAllPosition) * race.getRaceRounds().size())));
+        });
 
 
     }

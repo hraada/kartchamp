@@ -1,18 +1,12 @@
 package cz.kartrace.kartchamp.domain.races;
 
-import cz.kartrace.kartchamp.domain.Kart;
-import cz.kartrace.kartchamp.domain.OverallResults;
-import cz.kartrace.kartchamp.domain.Scoring;
-import cz.kartrace.kartchamp.domain.Team;
+import cz.kartrace.kartchamp.domain.*;
 import cz.kartrace.kartchamp.domain.rounds.BaseRound;
 import cz.kartrace.kartchamp.domain.rounds.Qualification;
 import cz.kartrace.kartchamp.domain.rounds.Race;
 import org.springframework.util.Assert;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -45,13 +39,36 @@ public class FairChallenge extends BaseRace<BaseRound> {
     }
 
     public void assignToKartRidesBasedOnQualification(Race.Round raceRound) {
+        Qualification.Round qualification = getRaceRoundQualification(raceRound);
+        ResultList<Qualification.KartRide> qualiResultList = qualification.getRoundResultLists().get(0);
+
         raceRound.getRides().forEach(raceRide -> {
-            Kart kart = null;
-            Race.KartRide kartRide = raceRide.getKartRideByKart(kart).orElseThrow(() -> new RuntimeException("Kart not found in ride: " + kart.getId()));
-            kartRide.setDriver(null);
-            kartRide.setTeam(null);
-            kartRide.setStartPosition(0);
+            int kartRideCount = raceRide.getKartRides().size();
+            List<Kart> availableKarts = new ArrayList<>(getKarts());
+            qualiResultList.stream()
+                    .filter(qualiResult -> (qualiResult.getPosition() - 1) / kartRideCount == raceRide.getOrder())
+                    .forEach(sourceQualiResult -> {
+                        Qualification.KartRide qualiRide = sourceQualiResult.getKartRide();
+                        int qualiPosition = sourceQualiResult.getPosition();
+
+                        Kart kart = castKart(availableKarts);
+                        availableKarts.remove(kart);
+                        Race.KartRide kartRide = raceRide.getKartRideByKart(kart).orElseThrow(() -> new RuntimeException("Kart not found in ride: " + kart.getId()));
+                        kartRide.setDriver(qualiRide.getDriver());
+                        kartRide.setTeam(qualiRide.getTeam());
+                        kartRide.setStartPosition((qualiPosition - 1) % kartRideCount + 1);
+                    });
         });
+
+    }
+
+    private Kart castKart(List<Kart> availableKarts) {
+        return availableKarts.get((int) (Math.random() * (availableKarts.size())));
+    }
+
+    private Qualification.Round getRaceRoundQualification(Race.Round raceRound) {
+        int raceIndex = getRaceRounds().indexOf(raceRound);
+        return getQualificationRounds().get(raceIndex);
     }
 
     public List<Qualification.Round> getQualificationRounds() {
@@ -65,7 +82,7 @@ public class FairChallenge extends BaseRace<BaseRound> {
     private <T extends BaseRound> List<T> filterByType(Class<T> clazz, List<BaseRound> rounds) {
         return rounds.stream()
                 .filter(round -> round.getClass().isAssignableFrom(clazz))
-                .map(round -> (T)round)
+                .map(round -> (T) round)
                 .collect(toList());
     }
 

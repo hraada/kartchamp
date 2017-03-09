@@ -28,11 +28,11 @@ public class ITFairQualificationTest {
     private int teamSize;
     private int kartCount;
 
-    public ITFairQualificationTest(FairQualification race) {
+    public ITFairQualificationTest(String formatCode) {
+        this.race = (FairQualification) BaseRace.getRaceByFormatCode(formatCode, "Test Challenge", new Date());
         this.teams = TestData.getTeams(race.getTeamCount());
         this.teamDriverMap = TestData.getDrivers(teams, race.getTeamSize());
         this.teamOrder = TestData.getTeamOrder(teams);
-        this.race = race;
         this.teamCount = race.getTeamCount();
         this.teamSize = race.getTeamSize();
         this.kartCount = race.getKarts().size();
@@ -41,7 +41,10 @@ public class ITFairQualificationTest {
 
     @Parameterized.Parameters(name = "{0} teams")
     public static Iterable<? extends Object> data() {
-        return Arrays.asList(new Object[] {BaseRace.getRaceByFormatCode("fair-qualification:qualiRoundCount=2,teamCount=10,teamSize=3,kartCount=6,scoring=incremental 1-based", "Test Qualification", new Date()) });
+        return Arrays.asList("fair-qualification:qualiRoundCount=2,teamCount=10,teamSize=3,kartCount=6,scoring=incremental 1-based",
+                "fair-qualification:qualiRoundCount=2,teamCount=10,teamSize=3,kartCount=10,scoring=incremental 1-based",
+                "fair-qualification:qualiRoundCount=2,teamCount=12,teamSize=3,kartCount=6,scoring=incremental 1-based",
+                "fair-qualification:qualiRoundCount=2,teamCount=12,teamSize=3,kartCount=12,scoring=incremental 1-based");
     }
 
     @Test
@@ -58,13 +61,6 @@ public class ITFairQualificationTest {
                 assertThat(ride.getKartRides().size(), is(equalTo(kartCount)));
             });
         });
-    }
-
-    @Test
-    public void test() {
-        race.assignTeamsToKartRidesUsingOrder(teamOrder);
-
-        System.out.println(race.getRounds());
     }
 
     @Test

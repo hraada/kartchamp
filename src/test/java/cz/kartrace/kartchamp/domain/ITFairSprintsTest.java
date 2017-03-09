@@ -30,20 +30,20 @@ public class ITFairSprintsTest {
     private int teamSize;
     private int kartCount;
 
-    public ITFairSprintsTest(FairSprints race) {
+    public ITFairSprintsTest(String formatCode) {
+        this.race = (FairSprints) BaseRace.getRaceByFormatCode(formatCode, "Test Sprints", new Date());
         this.teams = TestData.getTeams(race.getTeamCount());
         this.teamDriverMap = TestData.getDrivers(teams, race.getTeamSize());
         this.teamCount = race.getTeamCount();
         this.teamSize = race.getTeamSize();
         this.teamOrder = TestData.getTeamOrder(teams);
-        this.race = race;
         this.kartCount = race.getKarts().size();
     }
 
     @Parameterized.Parameters(name = "{0} teams")
     public static Iterable<? extends Object> data() {
-        return Arrays.asList(new Object[]{ BaseRace.getRaceByFormatCode("fair-sprints:roundCount=2,teamCount=10,teamSize=3,scoring=progressive 1-based", "Sprint Test", new Date()) },
-                             new Object[]{ BaseRace.getRaceByFormatCode("fair-sprints:roundCount=2,teamCount=12,teamSize=3,scoring=progressive 0-based", "Sprint Test", new Date()) });
+        return Arrays.asList("fair-sprints:roundCount=2,teamCount=10,teamSize=3,scoring=progressive 1-based",
+                             "fair-sprints:roundCount=2,teamCount=12,teamSize=3,scoring=progressive 0-based");
     }
 
     @Test
