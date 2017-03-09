@@ -10,7 +10,7 @@ This application is responsible for kartrace.cz races management.
 
 ### Naming ###
 Race - An event in which all teams participate and based on their performance, overall team and driver results are counted
-Round - A part of the event, for which team and driver results can be counted. Might be repeated to achieve more fair results (to allow all karts to be used by the teams).
+Round - A part of the event, for which team and driver result list can be counted (one ore more). Might be repeated to achieve more fair results (to allow all karts to be used by the teams).
 Ride - A part of the round, which usually needs to be repeated with different teams/drivers to get enough results to be able to create some result.
 Kart ride - A single kart (used by some team/driver) result (time, position etc.) achieved during single ride.
 

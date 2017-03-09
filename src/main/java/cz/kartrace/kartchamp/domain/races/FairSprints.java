@@ -1,7 +1,7 @@
 package cz.kartrace.kartchamp.domain.races;
 
 import cz.kartrace.kartchamp.domain.Kart;
-import cz.kartrace.kartchamp.domain.Results;
+import cz.kartrace.kartchamp.domain.OverallResults;
 import cz.kartrace.kartchamp.domain.Scoring;
 import cz.kartrace.kartchamp.domain.Team;
 import cz.kartrace.kartchamp.domain.rounds.Sprint;
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
  */
 public class FairSprints extends BaseRace<Sprint.Round> {
 
-    public FairSprints(String name, Date date, int roundCount, int teamCount, int teamSize, String scoringFormat) {
-        super(name, date, teamCount, teamSize);
+    public FairSprints(String name, Date date, int roundCount, int teamCount, int teamSize, Scoring scoring) {
+        super(name, date, teamCount, teamSize, scoring);
 
         Assert.isTrue(roundCount > 0);
 
@@ -29,10 +29,9 @@ public class FairSprints extends BaseRace<Sprint.Round> {
             addKart(new Kart(i, "K" + String.valueOf(i)));
         }
 
-        Scoring scoring = Scoring.getScoring(scoringFormat);
         Assert.isTrue(scoring.getCount() == teamCount);
         for (int i = 0; i < roundCount; i++) {
-            addRound(new Sprint.Round(i, teamCount, getKarts(), scoring));
+            addRound(new Sprint.Round(i, teamCount, getKarts(), getScoring()));
         }
     }
 
@@ -63,13 +62,6 @@ public class FairSprints extends BaseRace<Sprint.Round> {
             teamPositionsInRide.put(i + 1, teamOrder.get((i + rideOrder) % teamOrder.size()));
         }
         return teamPositionsInRide;
-    }
-
-    @Override
-    public Results getResults() {
-        Results results = new Results();
-        getRounds().forEach(round -> results.addResults(round.getResults()));
-        return results;
     }
 
     @Override

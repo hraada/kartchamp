@@ -1,6 +1,7 @@
 package cz.kartrace.kartchamp.domain.rounds;
 
-import cz.kartrace.kartchamp.domain.Results;
+import cz.kartrace.kartchamp.domain.OverallResults;
+import cz.kartrace.kartchamp.domain.ResultList;
 import cz.kartrace.kartchamp.domain.Scoring;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -16,7 +17,7 @@ import static java.util.Comparator.comparingInt;
 /**
  * @author hradecky
  */
-public abstract class BaseRound<RIDE extends BaseRide, U extends BaseKartRide> {
+public abstract class BaseRound<RIDE extends BaseRide<KART_RIDE>, KART_RIDE extends BaseKartRide> {
     private String id = UUID.randomUUID().toString();
     private int order;          // 0-based order of the round in the race
     private String name;
@@ -54,8 +55,19 @@ public abstract class BaseRound<RIDE extends BaseRide, U extends BaseKartRide> {
         return Collections.unmodifiableList(rides);
     }
 
-    public abstract Results getResults();
 
+    public OverallResults getOverallRoundResults() {
+        OverallResults results = new OverallResults();
+        getRoundResultLists().forEach(roundResultList -> {
+            roundResultList.stream().forEach(result -> {
+                results.mergeTeamResult(new OverallResults.Result<>(result.getKartRide().getTeam(), result.getPoints(), result.getPosition()));
+                results.mergeDriverResult(new OverallResults.Result<>(result.getKartRide().getDriver(), result.getPoints(), result.getPosition()));
+            });
+        });
+        return results;
+    }
+
+    public abstract List<ResultList<KART_RIDE>> getRoundResultLists();
     @Override
     public String toString() {
         return String.format("Round: { id: %s, name: %s \n%s}", getId(), getName(), StringUtils.join(getRides(), "\n"));

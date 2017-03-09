@@ -1,11 +1,14 @@
 package cz.kartrace.kartchamp.domain.rounds;
 
 import cz.kartrace.kartchamp.domain.Kart;
-import cz.kartrace.kartchamp.domain.Results;
+import cz.kartrace.kartchamp.domain.ResultList;
 import cz.kartrace.kartchamp.domain.Scoring;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author hradecky
@@ -26,16 +29,25 @@ public class Sprint {
         }
 
         @Override
-        public Results getResults() {
-            Results results = new Results();
+        public List<ResultList<Race.KartRide>> getRoundResultLists() {
+            List<ResultList<Race.KartRide>> roundResultLists = new ArrayList<>();
+
+            //Each ride of sprints generate separate result list
             getRides().forEach(ride -> {
-                ride.getKartRides().forEach(kartRide -> {
-                    int position = kartRide.getFinishPosition();
+                List<Race.KartRide> sortedKartRides = ride.getKartRides().stream()
+                        .sorted()
+                        .collect(toList());
+
+                ResultList<Race.KartRide> resultList = new ResultList<>();
+                for (int i = 0; i < sortedKartRides.size(); i++) {
+                    int position = i + 1;
+                    Race.KartRide kartRide = sortedKartRides.get(i);
                     int points = getScoring().getPointsForPosition(position);
-                    results.addPointsAndPositions(kartRide.getDriver(), kartRide.getTeam(), new Results.PointsAndPositions(points, position));
-                });
+                    resultList.addResult(new ResultList.Result<>(kartRide, position, points));
+                }
+                roundResultLists.add(resultList);
             });
-            return results;
+            return roundResultLists;
         }
 
     }

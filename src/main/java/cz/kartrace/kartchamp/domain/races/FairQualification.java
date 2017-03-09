@@ -1,7 +1,7 @@
 package cz.kartrace.kartchamp.domain.races;
 
 import cz.kartrace.kartchamp.domain.Kart;
-import cz.kartrace.kartchamp.domain.Results;
+import cz.kartrace.kartchamp.domain.OverallResults;
 import cz.kartrace.kartchamp.domain.Scoring;
 import cz.kartrace.kartchamp.domain.Team;
 import cz.kartrace.kartchamp.domain.rounds.Qualification;
@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class FairQualification extends BaseRace<Qualification.Round> {
 
-    public FairQualification(String name, Date date, int qualiRoundCount, int teamCount, int teamSize, int kartCount, String scoringFormat) {
-        super(name, date, teamCount, teamSize);
+    public FairQualification(String name, Date date, int qualiRoundCount, int teamCount, int teamSize, int kartCount, Scoring scoring) {
+        super(name, date, teamCount, teamSize, scoring);
         Assert.isTrue(kartCount <= teamCount);
         Assert.isTrue(teamCount * Team.SIZE % kartCount == 0);
 
@@ -26,10 +26,9 @@ public class FairQualification extends BaseRace<Qualification.Round> {
             addKart(new Kart(i, "K" + String.valueOf(i)));
         }
 
-        Scoring scoring = Scoring.getScoring(scoringFormat);
         Assert.isTrue(scoring.getCount() == (teamSize * teamCount));
         for (int i = 0; i < qualiRoundCount; i++) {
-            addRound(new Qualification.Round(i, teamCount, getKarts(), scoring));
+            addRound(new Qualification.Round(i, teamCount, getKarts(), getScoring()));
         }
 
     }
@@ -37,7 +36,6 @@ public class FairQualification extends BaseRace<Qualification.Round> {
     @Override
     public void assignTeamsToKartRidesUsingOrder(List<Team> orderedTeams) {
         List<Kart> orderedKarts = getKarts();
-
 
         getRounds().forEach(round -> {
             round.getRides().forEach(ride -> {
@@ -50,11 +48,8 @@ public class FairQualification extends BaseRace<Qualification.Round> {
                     }
                 }
 
-
-
                 ride.getKartRides().forEach(kartRide -> {
                     kartRide.resetResultAndAssignments();
-
                     Team team = rideTeamKarts.get(kartRide.getKart());
                     kartRide.setTeam(team);
                 });
@@ -62,13 +57,5 @@ public class FairQualification extends BaseRace<Qualification.Round> {
         });
 
     }
-
-    @Override
-    public Results getResults() {
-        Results results = new Results();
-        getRounds().forEach(round -> results.addResults(round.getResults()));
-        return results;
-    }
-
 
 }

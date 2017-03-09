@@ -1,13 +1,19 @@
 package cz.kartrace.kartchamp.domain.rounds;
 
-import cz.kartrace.kartchamp.domain.*;
+import cz.kartrace.kartchamp.domain.Kart;
+import cz.kartrace.kartchamp.domain.ResultList;
+import cz.kartrace.kartchamp.domain.Scoring;
+import cz.kartrace.kartchamp.domain.Team;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author hradecky
@@ -29,8 +35,25 @@ public class Race {
         }
 
         @Override
-        public Results getResults() {
-            return new Results();
+        public List<ResultList<KartRide>> getRoundResultLists() {
+            ResultList<KartRide> resultList = new ResultList<>();
+            getRides().forEach(ride -> {
+                int kartRideCount = ride.getKartRides().size();
+                int startPosition = ride.getOrder() * kartRideCount;
+
+                List<KartRide> sortedKartRides = ride.getKartRides().stream()
+                        .sorted()
+                        .collect(toList());
+
+                for (int i = startPosition; i < startPosition + kartRideCount; i++) {
+                    int position = i + 1;
+                    int points = getScoring().getPointsForPosition(position);
+                    Race.KartRide kartRide = sortedKartRides.get(i);
+                    resultList.addResult(new ResultList.Result<>(kartRide, position, points));
+                }
+
+            });
+            return new ArrayList<>(singletonList(resultList));
         }
     }
 
@@ -43,7 +66,6 @@ public class Race {
                 addKartRide(new KartRide(kart));
             });
         }
-
 
         @Override
         public String toString() {

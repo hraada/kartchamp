@@ -1,13 +1,17 @@
 package cz.kartrace.kartchamp.domain.rounds;
 
 import cz.kartrace.kartchamp.domain.Kart;
-import cz.kartrace.kartchamp.domain.Results;
+import cz.kartrace.kartchamp.domain.ResultList;
 import cz.kartrace.kartchamp.domain.Scoring;
 import cz.kartrace.kartchamp.domain.Team;
 import org.springframework.util.Assert;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author hradecky
@@ -29,12 +33,23 @@ public class Qualification {
         }
 
         @Override
-        public Results getResults() {
-            return new Results();
+        public List<ResultList<KartRide>> getRoundResultLists() {
+            List<KartRide> sortedKartRides = getRides().stream()
+                    .flatMap(ride -> ride.getKartRides().stream())
+                    .sorted()
+                    .collect(toList());
+
+            ResultList<KartRide> resultList = new ResultList<>();
+            for (int i = 0; i < sortedKartRides.size(); i++) {
+                int position = i + 1;
+                KartRide kartRide = sortedKartRides.get(i);
+                int points = getScoring().getPointsForPosition(position);
+                resultList.addResult(new ResultList.Result<>(kartRide, position, points));
+            }
+            return new ArrayList<>(singletonList(resultList));
         }
 
     }
-
 
     public static class Ride extends BaseRide<KartRide> {
 
@@ -81,8 +96,8 @@ public class Qualification {
 
         @Override
         public int compareTo(KartRide o) {
-            int bestTimeResult = bestTime.compareTo(o.bestTime);
-            int orderResult = order - o.order;
+            int bestTimeResult = getBestTime().compareTo(o.getBestTime());
+            int orderResult = getOrder() - o.getOrder();
             return bestTimeResult != 0 ? bestTimeResult : orderResult;
         }
     }

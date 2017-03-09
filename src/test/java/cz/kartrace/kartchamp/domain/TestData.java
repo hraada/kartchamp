@@ -1,8 +1,6 @@
 package cz.kartrace.kartchamp.domain;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparingInt;
@@ -22,17 +20,22 @@ public class TestData {
         return teams;
     }
 
-    public static Set<Driver> getDrivers(int teamCount, int teamSize) {
-        Set<Driver> drivers = new HashSet<>();
-        for (int i = 0; i < teamCount * teamSize; i++) {
-            Driver driver = new Driver("Franta", "Bednář " + i);
-            drivers.add(driver);
+    public static Map<Team, List<Driver>> getDrivers(Set<Team> teams, int teamSize) {
+        Map<Team, List<Driver>> teamToDriverMap = new HashMap<>();
+
+        for (Team team: teams) {
+            List<Driver> drivers = new ArrayList<>();
+            for (int i = 0; i < teamSize; i++) {
+                Driver driver = new Driver("Franta", "Bednář " + i + " (" + team.getShortName() + ")");
+                drivers.add(driver);
+            }
+            teamToDriverMap.put(team, drivers);
         }
-        return drivers;
+        return teamToDriverMap;
     }
 
 
-    public static List<Team> getReverseTeamOrder(Set<Team> teams) {
+    public static List<Team> getTeamOrder(Set<Team> teams) {
         List<Team> teamOrder = teams.stream().collect(Collectors.toList());
         teamOrder.sort(comparingInt(Team::getCastOrder));
         //Collections.reverse(teamOrder);
