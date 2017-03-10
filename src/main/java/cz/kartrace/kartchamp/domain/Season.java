@@ -8,19 +8,19 @@ import java.util.UUID;
 /**
  * @author hradecky
  */
-public class Driver {
-    private String id;
+public class Season {
+    private String id = UUID.randomUUID().toString();
     private String name;
-    private String surname;
+    private int year;
 
-    public Driver(String id, String name, String surname) {
+    public Season(String id, String name, Integer year) {
         this.id = id;
         this.name = name;
-        this.surname = surname;
+        this.year = year;
     }
 
-    public Driver(String name, String surname) {
-        this(UUID.randomUUID().toString(), name, surname);
+    public Season(String name, int year) {
+        this(UUID.randomUUID().toString(), name, year);
     }
 
     public String getId() {
@@ -31,21 +31,21 @@ public class Driver {
         return name;
     }
 
-    public String getSurname() {
-        return surname;
+    public int getYear() {
+        return year;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setYear(int year) {
+        this.year = year;
     }
 
     @Override
     public String toString() {
-        return String.format("Driver: { Id: %s, Name: %s, Surname: %s}", getId(), getName(), getSurname());
+        return String.format("Season: { Id: %s, Name: %s}", getId(), getName());
     }
 
     @Override

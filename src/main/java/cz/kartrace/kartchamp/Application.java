@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author hradecky
  */
 @SpringBootApplication
-public class KartChamp {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(KartChamp.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }

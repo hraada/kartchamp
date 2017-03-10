@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="hradba">
+        <createTable tableName="seasons" remarks="Championship seasons">
+            <column name="id" type="varchar(36)" />
+            <column name="name" type="varchar(100)" />
+            <column name="year" type="int" />
+        </createTable>
+        <addNotNullConstraint tableName="seasons" columnName="id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="seasons" columnNames="id" />
+        <addUniqueConstraint columnNames="name" tableName="seasons"/>
+
+
+        <createTable tableName="drivers" remarks="Championship drivers">
+            <column name="id" type="varchar(36)" />
+            <column name="name" type="varchar(100)" />
+            <column name="surname" type="varchar(100)" />
+        </createTable>
+        <addNotNullConstraint tableName="drivers" columnName="id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="drivers" columnNames="id" />
+
+
+        <createTable tableName="teams" remarks="Championship teams">
+            <column name="id" type="varchar(36)" />
+            <column name="name" type="varchar(100)" />
+            <column name="short_name" type="varchar(100)" />
+            <column name="cast_order" type="int" remarks="Order in which team cast to create teamOrder for race (depends on race format)"/>
+        </createTable>
+        <addNotNullConstraint tableName="teams" columnName="id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="teams" columnNames="id" />
+
+
+        <createTable tableName="races" remarks="Championship races">
+            <column name="id" type="varchar(36)" />
+            <column name="season_id" type="varchar(36)" />
+            <column name="name" type="varchar(100)" />
+            <column name="format_code" type="varchar(100)" />
+            <column name="race_date" type="date" />
+        </createTable>
+        <addNotNullConstraint tableName="races" columnName="id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="races" columnName="season_id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="races" columnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_races_season" baseTableName="races" baseColumnNames="season_id" referencedTableName="seasons" referencedColumnNames="id" />
+
+
+        <createTable tableName="race_rounds" remarks="Championship race rounds">
+            <column name="id" type="varchar(36)" />
+            <column name="race_id" type="varchar(36)" />
+            <column name="type" type="varchar(100)" />
+            <column name="name" type="varchar(100)" />
+            <column name="round_order" type="int" />
+        </createTable>
+        <addNotNullConstraint tableName="race_rounds" columnName="id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="race_rounds" columnName="race_id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="race_rounds" columnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_race_rounds_race" baseTableName="race_rounds" baseColumnNames="race_id" referencedTableName="races" referencedColumnNames="id" />
+
+
+        <createTable tableName="race_rides" remarks="Championship race round rides">
+            <column name="id" type="varchar(36)" />
+            <column name="round_id" type="varchar(36)" />
+            <column name="name" type="varchar(100)" />
+            <column name="ride_order" type="int" />
+        </createTable>
+        <addNotNullConstraint tableName="race_rides" columnName="id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="race_rides" columnName="round_id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="race_rides" columnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_race_rides_round" baseTableName="race_rides" baseColumnNames="round_id" referencedTableName="race_rounds" referencedColumnNames="id" />
+
+
+        <createTable tableName="race_kart_rides" remarks="Championship race round ride individual kart rides">
+            <column name="id" type="varchar(36)" />
+            <column name="ride_id" type="varchar(36)" />
+            <column name="type" type="varchar(100)" />
+            <column name="name" type="varchar(100)" />
+            <column name="best_time" type="int" />
+            <column name="start_position" type="int" />
+            <column name="finish_position" type="int" />
+        </createTable>
+        <addNotNullConstraint tableName="race_kart_rides" columnName="id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="race_kart_rides" columnName="ride_id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="race_kart_rides" columnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_race_kart_rides_ride" baseTableName="race_kart_rides" baseColumnNames="ride_id" referencedTableName="race_rides" referencedColumnNames="id" />
+
+
+        <createTable tableName="race_karts" remarks="Karts available for the race">
+            <column name="id" type="varchar(36)" />
+            <column name="race_id" type="varchar(36)" />
+            <column name="number" type="varchar(100)" remarks="In some cases, numbers can contain for example leading zero etc. (that's why text i data type is used)"/>
+            <column name="kart_order" type="int" />
+        </createTable>
+        <addNotNullConstraint tableName="race_karts" columnName="id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="race_karts" columnName="race_id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="race_karts" columnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_race_karts_race" baseTableName="race_karts" baseColumnNames="race_id" referencedTableName="races" referencedColumnNames="id" />
+
+
+        <createTable tableName="season_assignments" remarks="Assignment of drivers in teams during season">
+            <column name="id" type="varchar(36)" />
+            <column name="season_id" type="varchar(36)" />
+            <column name="team_id" type="varchar(36)" />
+            <column name="driver_id" type="varchar(36)" />
+        </createTable>
+        <addNotNullConstraint tableName="season_assignments" columnName="id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="season_assignments" columnName="season_id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="season_assignments" columnName="team_id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="season_assignments" columnName="driver_id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="season_assignments" columnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_season_assignments_season" baseTableName="season_assignments" baseColumnNames="season_id" referencedTableName="seasons" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_season_assignments_team" baseTableName="season_assignments" baseColumnNames="team_id" referencedTableName="teams" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_season_assignments_driver" baseTableName="season_assignments" baseColumnNames="driver_id" referencedTableName="drivers" referencedColumnNames="id" />
+
+
+        <createTable tableName="race_assignments" remarks="Assignments of drivers in teams for race">
+            <column name="id" type="varchar(36)" />
+            <column name="race_id" type="varchar(36)" />
+            <column name="team_id" type="varchar(36)" />
+            <column name="driver_id" type="varchar(36)" />
+            <column name="team_order" type="int" remarks="Result of the cast (or other method to set team teamOrder for the race). Value is same for all team rows in the race"/>
+        </createTable>
+        <addNotNullConstraint tableName="race_assignments" columnName="id" columnDataType="varchar(36)" />
+        <addNotNullConstraint tableName="race_assignments" columnName="race_id" columnDataType="varchar(36)" />
+        <addPrimaryKey tableName="race_assignments" columnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_race_assignments_season" baseTableName="race_assignments" baseColumnNames="race_id" referencedTableName="races" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_race_assignments_team" baseTableName="race_assignments" baseColumnNames="team_id" referencedTableName="teams" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_race_assignments_driver" baseTableName="race_assignments" baseColumnNames="driver_id" referencedTableName="drivers" referencedColumnNames="id" />
+
+
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -23,7 +23,7 @@ public class FairQualification extends BaseRace<Qualification.Round> {
         Assert.isTrue(teamCount * Team.SIZE % kartCount == 0);
 
         for (int i = 0; i < kartCount; i++) {
-            addKart(new Kart(i, "K" + String.valueOf(i)));
+            addKart(new Kart(i, "K" + String.valueOf(i), getId()));
         }
 
         Assert.isTrue(scoring.getCount() == (teamSize * teamCount));

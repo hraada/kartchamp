@@ -8,25 +8,29 @@ import java.util.UUID;
 /**
  * @author hradecky
  */
-public class RaceAssignment {
+public class SeasonAssignment {
     private String id;
+    private Season season;
     private Team team;
     private Driver driver;
-    private int teamOrder;
 
-    public RaceAssignment(String id, Team team, Driver driver, int teamOrder) {
+    public SeasonAssignment(String id, Season season, Team team, Driver driver) {
         this.id = id;
+        this.season = season;
         this.team = team;
         this.driver = driver;
-        this.teamOrder = teamOrder;
     }
 
-    public RaceAssignment(Team team, Driver driver, int teamOrder) {
-        this(UUID.randomUUID().toString(), team, driver, teamOrder);
+    public SeasonAssignment(Season season, Team team, Driver driver) {
+        this(UUID.randomUUID().toString(), season, team, driver);
     }
 
     public String getId() {
         return id;
+    }
+
+    public Season getSeason() {
+        return season;
     }
 
     public Team getTeam() {
@@ -37,11 +41,8 @@ public class RaceAssignment {
         return driver;
     }
 
-    public int getTeamOrder() {
-        return teamOrder;
-    }
-
-    public void assign(Team team, Driver driver) {
+    public void assign(Season season, Team team, Driver driver) {
+        this.season = season;
         this.team = team;
         this.driver = driver;
     }

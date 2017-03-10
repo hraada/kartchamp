@@ -30,8 +30,10 @@ public abstract class BaseRace<ROUND extends BaseRound> {
         this.teamCount = teamCount;
         this.teamSize = teamSize;
 
-        for (int i = 0; i < teamCount * teamSize; i++) {
-            raceAssignments.add(new RaceAssignment());
+        for (int i = 0; i < teamCount; i++) {
+            for (int j = 0; j < teamSize; j++) {
+                raceAssignments.add(new RaceAssignment(null, null, j));
+            }
         }
         this.scoring = scoring;
     }
@@ -39,7 +41,7 @@ public abstract class BaseRace<ROUND extends BaseRound> {
     public List<Driver> getTeamRaceAssignments(Team team) {
         return raceAssignments.stream()
                 .filter(raceAssignment -> raceAssignment.getTeam().equals(team))
-                .sorted(comparingInt(RaceAssignment::getOrder))
+                .sorted(comparingInt(RaceAssignment::getTeamOrder))
                 .map(RaceAssignment::getDriver)
                 .collect(toList());
     }

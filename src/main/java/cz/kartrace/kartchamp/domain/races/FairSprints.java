@@ -26,7 +26,7 @@ public class FairSprints extends BaseRace<Sprint.Round> {
 
         int kartCount = teamCount;
         for (int i = 0; i < kartCount; i++) {
-            addKart(new Kart(i, "K" + String.valueOf(i)));
+            addKart(new Kart(i, "K" + String.valueOf(i), getId()));
         }
 
         Assert.isTrue(scoring.getCount() == teamCount);
