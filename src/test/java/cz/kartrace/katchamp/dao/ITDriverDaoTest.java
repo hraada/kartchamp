@@ -27,7 +27,7 @@ public class ITDriverDaoTest {
     @Test
     public void when_driver_is_inserted_and_retrieved_by_id_values_must_match() {
         Driver driver = new Driver("Franta", "Bednar");
-        driverDao.insertDriver(driver);
+        driverDao.mergeDriver(driver);
 
         Driver fetchedDriver = driverDao.getDriverById(driver.getId());
 
@@ -37,10 +37,10 @@ public class ITDriverDaoTest {
     @Test
     public void when_driver_is_updated_and_retrieved_by_id_values_must_match() {
         Driver driver = new Driver("Franta 2", "Bednar 2");
-        driverDao.insertDriver(driver);
+        driverDao.mergeDriver(driver);
         driver.setName("Franta 3");
         driver.setSurname("Bednar 3");
-        driverDao.updateDriver(driver);
+        driverDao.mergeDriver(driver);
 
         Driver fetchedDriver = driverDao.getDriverById(driver.getId());
 

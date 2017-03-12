@@ -18,11 +18,11 @@
             </thead>
             <tbody>
             {{#each seasons}}
-            <tr ng-click="seasonClicked(season)">
-                <td>{{name}}</td>
-                <td>{{year}}</td>
-                <td><a class="btn pull-right" ng-click="editSeasonClicked(season)"><i class="icon-edit"></i></a></td>
-            </tr>
+                <tr ng-click="seasonClicked(season)">
+                    <td>{{name}}</td>
+                    <td>{{year}}</td>
+                    <td><a class="btn pull-right" ng-click="editSeasonClicked(season)"><i class="icon-edit"></i></a></td>
+                </tr>
             {{/each}}
             </tbody>
         </table>

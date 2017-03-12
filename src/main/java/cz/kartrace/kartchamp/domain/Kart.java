@@ -14,7 +14,7 @@ public class Kart {
     private String number;
     private int order;      // 0-based, ordering of the kart (useful mainly for predictable order in fair sprints and fair qualification)
 
-    public Kart(String id, String number, Integer order, String raceId) {
+    public Kart(String id, String raceId, String number, Integer order) {
         this.id = id;
         this.raceId = raceId;
         this.number = number;
@@ -22,7 +22,7 @@ public class Kart {
     }
 
     public Kart(int order, String number, String raceId) {
-        this(UUID.randomUUID().toString(), number, order, raceId);
+        this(UUID.randomUUID().toString(), raceId, number, order);
     }
 
     public String getId() {

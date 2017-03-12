@@ -1,0 +1,32 @@
+{{#partial "main" }}
+    <div class="span9">
+        <ul class="breadcrumb">
+            <li><a href="#">Home</a> <span class="divider">/</span></li>
+            <li class="active"><a href="#/management/season">Správa šampionátu</a> <span class="divider">/</span></li>
+            <li class="active">Jezdci</li>
+        </ul>
+    </div>
+
+    <div class="span3">
+        <form>
+            <fieldset>
+                <legend>Editace jezdce</legend>
+                <label>Jméno</label>
+                <input type="text" value="{{driver.name}}"/>
+                <label>Přijmení</label>
+                <input type="text" value="{{driver.surname}}"/>
+
+
+            </fieldset>
+        </form>
+        
+        <a class="btn" href="/management/driver/delete/{{id}}">Smazat</a>
+        <a class="btn btn-primary" href="/management/driver/save">Uložit</a>
+
+
+    </div>
+    </div>
+{{/partial}}
+
+{{> management/sidebar_menu}}
+{{> index}}

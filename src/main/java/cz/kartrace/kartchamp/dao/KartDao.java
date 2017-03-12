@@ -12,9 +12,7 @@ public interface KartDao {
     @Select("SELECT * FROM race_karts WHERE id = #{id}")
     Kart getKartById(@Param("id") String id);
 
-    @Insert("INSERT INTO race_karts (id, number, kart_order) VALUES (#{kart.id}, #{kart.number}, #{kart.order})")
-    void insertKart(@Param("kart") Kart kart);
+    @Insert("MERGE INTO race_karts (id, number, kart_order) KEY(id) VALUES (#{kart.id}, #{kart.number}, #{kart.order})")
+    void mergeKart(@Param("kart") Kart kart);
 
-    @Update("UPDATE race_karts SET number=#{kart.number}, kart_order=#{kart.order} WHERE id = #{kart.id}")
-    void updateKart(@Param("kart") Kart kart);
 }

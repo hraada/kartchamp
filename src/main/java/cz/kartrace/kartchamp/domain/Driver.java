@@ -13,6 +13,10 @@ public class Driver {
     private String name;
     private String surname;
 
+    public Driver() {
+
+    }
+
     public Driver(String id, String name, String surname) {
         this.id = id;
         this.name = name;

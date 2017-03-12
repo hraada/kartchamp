@@ -1,7 +1,10 @@
 package cz.kartrace.kartchamp.dao;
 
 import cz.kartrace.kartchamp.domain.Driver;
+import cz.kartrace.kartchamp.domain.Season;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * @author hradecky
@@ -9,12 +12,14 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface DriverDao {
 
+
+    @Select("SELECT * FROM drivers ORDER BY name, surname")
+    List<Driver> getDrivers();
+
     @Select("SELECT * FROM drivers WHERE id = #{id}")
     Driver getDriverById(@Param("id") String id);
 
-    @Insert("INSERT INTO drivers (id, name, surname) VALUES (#{driver.id}, #{driver.name}, #{driver.surname})")
-    void insertDriver(@Param("driver") Driver driver);
+    @Insert("MERGE INTO drivers (id, name, surname) KEY(id) VALUES (#{driver.id}, #{driver.name}, #{driver.surname})")
+    void mergeDriver(@Param("driver") Driver driver);
 
-    @Update("UPDATE drivers SET name=#{driver.name}, surname=#{driver.surname} WHERE id = #{driver.id}")
-    void updateDriver(@Param("driver") Driver driver);
 }

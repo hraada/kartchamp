@@ -26,7 +26,7 @@ public class ITSeasonDaoTest {
     @Test
     public void when_season_is_inserted_and_retrieved_by_id_values_must_match() {
         Season season = new Season("Season 2016", 2016);
-        seasonDao.insertSeason(season);
+        seasonDao.mergeSeason(season);
 
         Season fetchedTeam = seasonDao.getSeasonById(season.getId());
 
@@ -36,10 +36,10 @@ public class ITSeasonDaoTest {
     @Test
     public void when_season_is_updated_and_retrieved_by_id_values_must_match() {
         Season season = new Season("Season 2017", 2017);
-        seasonDao.insertSeason(season);
+        seasonDao.mergeSeason(season);
         season.setName("Season 2018");
         season.setYear(2018);
-        seasonDao.updateSeason(season);
+        seasonDao.mergeSeason(season);
 
         Season fetchedSeason = seasonDao.getSeasonById(season.getId());
 

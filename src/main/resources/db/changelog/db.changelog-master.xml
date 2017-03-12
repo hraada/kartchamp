@@ -97,7 +97,6 @@
             <column name="kart_order" type="int" />
         </createTable>
         <addNotNullConstraint tableName="race_karts" columnName="id" columnDataType="varchar(36)" />
-        <addNotNullConstraint tableName="race_karts" columnName="race_id" columnDataType="varchar(36)" />
         <addPrimaryKey tableName="race_karts" columnNames="id" />
         <addForeignKeyConstraint constraintName="fk_race_karts_race" baseTableName="race_karts" baseColumnNames="race_id" referencedTableName="races" referencedColumnNames="id" />
 

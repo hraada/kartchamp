@@ -27,7 +27,7 @@ public class ITTeamDaoTest {
     @Test
     public void when_team_is_inserted_and_retrieved_by_id_values_must_match() {
         Team team = new Team("K.R.T. Racing", "K.R.T.", 1);
-        teamDao.insertTeam(team);
+        teamDao.mergeTeam(team);
 
         Team fetchedTeam = teamDao.getTeamById(team.getId());
 
@@ -37,11 +37,11 @@ public class ITTeamDaoTest {
     @Test
     public void when_team_is_updated_and_retrieved_by_id_values_must_match() {
         Team team = new Team("K.R.T. Racing", "K.R.T.", 1);
-        teamDao.insertTeam(team);
+        teamDao.mergeTeam(team);
         team.setName("K.R.T. Racing 2");
         team.setShortName("K.R.T. 2");
         team.setCastOrder(2);
-        teamDao.updateTeam(team);
+        teamDao.mergeTeam(team);
 
         Team fetchedTeam = teamDao.getTeamById(team.getId());
 

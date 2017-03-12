@@ -26,7 +26,7 @@ public class ITKartDaoTest {
     @Test
     public void when_kart_is_inserted_and_retrieved_by_id_values_must_match() {
         Kart kart = new Kart(1, "01", null);
-        kartDao.insertKart(kart);
+        kartDao.mergeKart(kart);
 
         Kart fetchedKart = kartDao.getKartById(kart.getId());
 
@@ -36,10 +36,10 @@ public class ITKartDaoTest {
     @Test
     public void when_kart_is_updated_and_retrieved_by_id_values_must_match() {
         Kart kart = new Kart(2, "02", null);
-        kartDao.insertKart(kart);
+        kartDao.mergeKart(kart);
         kart.setNumber("03");
         kart.setOrder(3);
-        kartDao.updateKart(kart);
+        kartDao.mergeKart(kart);
 
         Kart fetchedKart = kartDao.getKartById(kart.getId());
 
