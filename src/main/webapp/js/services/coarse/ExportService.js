@@ -143,7 +143,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     '    <TD class=tab_nadpis>Body celkem</TD>\n' +
                     '</TR>\n';
             }
-            else if (type == 'fairsprints') {
+            else if (type == 'fairsprints' || type == 'fairsprints12') {
                 return '<TR>\n' +
                     '    <TD class=tab_nadpis></TD>\n' +
                     '    <TD class=tab_nadpis>Tým</TD>\n' +
@@ -260,6 +260,40 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
             output += '</TBODY></TABLE>\n';
             return output;
         },
+        getDriverFairSprintsResultsAsHtml: function (driverResults, type) {
+
+            var output = '<TABLE border=0 cellSpacing=2 cellPadding=0 width="95%">\n' +
+                '<TR>\n' +
+                '    <TD class=tab_nadpis></TD>\n' +
+                '    <TD class=tab_nadpis>Jezdec</TD>\n' +
+                '    <TD class=tab_nadpis>Tým</TD>\n' +
+                '    <TD class=tab_nadpis>Závod 1</TD>\n' +
+                '    <TD class=tab_nadpis>Závod 2</TD>\n' +
+                '    <TD class=tab_nadpis>Body celkem</TD>\n' +
+                '</TR>\n';
+
+            var index = 1;
+            angular.forEach(driverResults, function (driverResult) {
+                var rowStyle = "";
+                if (index % 2 != 0) {
+                    rowStyle = "tab_1";
+                } else {
+                    rowStyle = "tab_2";
+                }
+                output += '<TR>\n' +
+                    '   <TD class=' + rowStyle + '>' + index + '</TD>\n' +
+                    '   <TD class=' + rowStyle + '>' + driverResult.name + '</TD>\n' +
+                    '   <TD class=' + rowStyle + '>' + driverResult.teamName + '</TD>\n' +                    
+                    '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[0] + '</TD>\n' +
+                    '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[1] + '</TD>\n' +
+                    '   <TD class=' + rowStyle + 'c>' + driverResult.totalDriverPoints + '</TD>\n' +
+                    '</TR>\n';
+                index++;
+            });
+
+            output += '</TBODY></TABLE>\n';
+            return output;
+        },        
         getDriverQualificationResultsAsHtml: function (driverResults) {
             var output = '<TABLE border=0 cellSpacing=2 cellPadding=0 width="95%">\n' +
                 '<TBODY>\n' +
@@ -296,6 +330,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
         },
 
         getDriverChallengeResultsAsHtml: function (driverResults, type) {
+            var additionalColumn = (type == 'challenge3x10') ? '<TD class=tab_nadpis>Závod 3</TD>\n' : '';
             var output = '<TABLE border=0 cellSpacing=2 cellPadding=0 width="95%">\n' +
                 '<TBODY>\n' +
                 '<TR>\n' +
@@ -304,7 +339,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                 '    <TD class=tab_nadpis>Tým</TD>\n' +
                 '    <TD class=tab_nadpis>Závod 1</TD>\n' +
                 '    <TD class=tab_nadpis>Závod 2</TD>\n' +
-                    (type == 'challenge3x10') ? '<TD class=tab_nadpis>Závod 3</TD>\n' : '' +
+                additionalColumn +
                 '    <TD class=tab_nadpis>Body celkem</TD>\n' +
                 '</TR>\n';
 

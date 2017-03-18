@@ -57,15 +57,19 @@ service.factory('challengeService', function (persistenceService) {
                 });
             });
 
+            var rideCount = 5;
+            if (race.raceType == 'fairchallenge12') {
+                rideCount = 6;
+            }
             persistenceService.flush(function () {
                 race.karts.list(function (karts) {
 
-                    if (race.raceType != 'challenge3x10') {
-                        for (var i = 0; i < 5; i++) {
+                    if (race.raceType != 'challenge3x10' && race.raceType != 'challenge2x10') {
+                        for (var i = 0; i < rideCount; i++) {
                             var randomKarts = self.shuffleArray(karts);
                             for (var j = 0; j < 6; j++) {
                                 var result = qualificationResults[i * 6 + j];
-                                self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * 5 + i + 1, j + 1);
+                                self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * rideCount + i + 1, j + 1);
                             }
                         }
                     } else {
@@ -114,13 +118,17 @@ service.factory('challengeService', function (persistenceService) {
                 var roundPoints = null;
                 var roundPosition;
                 var lastRoundIndex = -1;
+                var maxPoints = 30;
+                if (race.raceType == 'fairchallenge12') {
+                    maxPoints = 36;
+                }                   
                 angular.forEach(results, function (result) {
                     if (lastRoundIndex != result.roundIndex) {
                         lastRoundIndex = result.roundIndex;
-                        roundPoints = 30;
+                        roundPoints = maxPoints;
                     }
 
-                    roundPosition = 30 - roundPoints + 1;
+                    roundPosition = maxPoints - roundPoints + 1;
                     
                 	//Team place counts (in case of same point sum)
                 	if (teamPlaceCounts[result.team.id] && teamPlaceCounts[result.team.id][roundPosition]) {

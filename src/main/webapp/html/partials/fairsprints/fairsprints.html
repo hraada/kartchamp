@@ -9,13 +9,13 @@
     </ul>
 
     <ul class="nav nav-tabs">
-        <li><a href="#home" data-toggle="tab">Zadání výsledků</a></li>
-        <li class="active"><a href="#results" data-toggle="tab" ng-click="resultButtonClicked(fairSprintRound, race)">Pořadí závodu</a></li>
+        <li class="active"><a href="#home" data-toggle="tab">Zadání výsledků</a></li>
+        <li><a href="#results" data-toggle="tab" ng-click="resultButtonClicked(fairSprintRound, race)">Pořadí závodu</a></li>
     </ul>
 
 
     <div class="tab-content">
-        <div class="tab-pane" id="home">
+        <div class="tab-pane active" id="home">
             <div class="btn-toolbar">
                 <div class="btn-group">
                     <button ng-repeat="ride in rideFilterList" ng-click="rideButtonClicked(ride.id)" class="btn"
@@ -46,7 +46,7 @@
                         <td>{{ride.kart.number}}</td>
                         <td>
                             <input type="text" ng-model="ride.bestTime" name="bestTime{{ride.id}}" class="input-small"
-                                   ui-mask="'9:99:999'" tabindex="{{$index + 11}}"/>
+                                   ui-mask="'9:99:999'" tabindex="{{$index + 13}}"/>
                         </td>
                         <td><input type="text" ng-model="ride.startPosition" class="input-mini" disabled/></td>
                         <td><input type="text" ng-model="ride.resultPosition" class="input-mini" tabindex="{{$index + 1}}"/></td>
@@ -58,7 +58,7 @@
 
         </div>
 
-        <div class="tab-pane active" id="results">
+        <div class="tab-pane" id="results">
             <div class="btn-toolbar">
                 <div class="btn-group pull-right">
                     <button ng-click="printButtonClicked()" class="btn btn-primary">Tisk</button>
@@ -66,8 +66,11 @@
                 </div>
             </div>
 
-            <table class="table table-condensed table-striped only-non-print">
+            <table class="table table-condensed table-striped only-non-print" ng-repeat="raceRideResults in results">
                 <thead>
+                <tr>
+                    <td colspan="6"><h4>Rozjížďka {{raceRideResults[0].rideIndex}}</h4></td>
+                </tr>                
                 <tr>
                     <th>Pořadí</th>
                     <th>Tým</th>
@@ -77,10 +80,7 @@
                     <th>Body</th>
                 </tr>
                 </thead>
-                <tbody ng-repeat="raceRideResults in results | orderBy:'rideIndex'">
-                <tr>
-                    <td colspan="6"><h4>Rozjížďka {{raceRideResults[0].rideIndex}}</h4></td>
-                </tr>
+                <tbody>
                 <tr ng-repeat="result in raceRideResults">
                     <td>{{result.resultPosition}}</td>
                     <td>{{result.team.name}}</td>
@@ -94,8 +94,11 @@
 
             <div id="fairsprints-print" class="only-print">
                 <h3>Výsledky {{fairSprintRound + 1}}. části závodu</h3>
-                <table class="table table-condensed table-striped">
+                <table class="table table-condensed table-striped" ng-repeat="raceRideResults in results" ng-class="getPrintPageBreakClass(raceRideResults[0].rideIndex)">
                     <thead>
+                    <tr>
+                        <td colspan="6"><h4>Rozjížďka {{raceRideResults[0].rideIndex}}</h4></td>
+                    </tr>                    
                     <tr>
                         <th>Pořadí</th>
                         <th>Tým</th>
@@ -105,10 +108,6 @@
                         <th>Body</th>
                     </tr>
                     </thead>
-                    <tbody ng-repeat="raceRideResults in results | orderBy:'rideIndex'">
-                    <tr>
-                        <td colspan="6"><h4>Rozjížďka {{raceRideResults[0].rideIndex}}</h4></td>
-                    </tr>
                     <tr ng-repeat="result in raceRideResults">
                         <td>{{result.resultPosition}}</td>
                         <td>{{result.team.shortName}}</td>

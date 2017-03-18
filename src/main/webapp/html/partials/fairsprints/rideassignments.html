@@ -26,8 +26,8 @@
                 <thead>
                 <tr>
                     <th>Rozjížďka</th>
-                    <th>1.část (jízdy 1 - 10)</th>
-                    <th>2.část (jízdy 11 - 20)</th>
+                    <th>1.část (jízdy 1 - {{teamCount}})</th>
+                    <th>2.část (jízdy {{teamCount + 1}} - {{teamCount * 2}})</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -38,7 +38,7 @@
                             ng-model="teamRounds[raceAssignment.team.id][0][$index + 1][0].driver" class="input" /></td>
                     <td><select
                             ng-options="driver as driver.name + ' ' + driver.surname for driver in [raceAssignment.driver, raceAssignment.driver2, raceAssignment.driver3]"
-                            ng-model="teamRounds[raceAssignment.team.id][1][$index + 11][0].driver" class="input" /></td>
+                            ng-model="teamRounds[raceAssignment.team.id][1][$index + teamCount + 1][0].driver" class="input" /></td>
                 </tr>
                 </tbody>
             </table>
@@ -54,9 +54,14 @@
                 </div>
                 <button ng-click="printButtonClicked()" class="btn btn-primary pull-right">Tisk</button>
             </div>
-            <h3 class="only-print">Rozpis závodů</h3>
-            <table class="table table-condensed">
+            <h3 class="only-print">Rozpis závodů</h3>            
+
+
+            <table class="table table-condensed" ng-repeat="raceRidesRound in raceRidesRounds | orderBy:'rideIndex'" ng-class="getPrintPageBreakClass(raceRidesRound.rideIndex)">
                 <thead>
+                <tr>
+                    <td colspan="3"><h4>Rozjížďka {{raceRidesRound.rideIndex}}</h4></td>
+                </tr>                
                 <tr>
                     <th>Pozice</th>
                     <th>Tým</th>
@@ -65,27 +70,15 @@
 
                 </tr>
                 </thead>
-                <tbody ng-repeat="raceRidesRound in raceRidesRounds | orderBy:'rideIndex'">
-
-
-                <tr>
-                    <td colspan="3"><h4>Rozjížďka {{raceRidesRound.rideIndex}}</h4></td>
-                </tr>
+                <tbody>
                 <tr ng-repeat="raceRideRound in raceRidesRound.rounds">
                     <td>{{raceRideRound.startPosition}}</td>
                     <td>{{raceRideRound.team.name}}</td>
                     <td>{{raceRideRound.driver.name + ' ' + raceRideRound.driver.surname}}</td>
                     <td>{{raceRideRound.kart.number}}</td>
                 </tr>
-                <tr ng-show="raceRidesRound.rideIndex == 3">
-                    <td style="height: 190px;"></td>
-                </tr>
-                <tr ng-show="raceRidesRound.rideIndex == 6">
-                    <td style="height: 240px;"></td>
-                </tr>
-
                 </tbody>
-            </table>
+            </table>            
         </div>
     </div>
 </div>

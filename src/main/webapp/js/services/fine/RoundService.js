@@ -42,6 +42,8 @@ service.factory('roundService', function (indexerService, raceService) {
             var qualRounds = []; 
             if (race.raceType == "challenge3x10") {
                 qualRounds = [0, 1, 2];
+            } if (race.raceType == "challenge2x10") {
+                qualRounds = [0, 1];
             } else if (race.raceType == "qualification" || race.raceType == "fairqualification") {
                 qualRounds = [0, 1, 2, 3];
             } else {
@@ -53,7 +55,8 @@ service.factory('roundService', function (indexerService, raceService) {
 
                 angular.forEach(raceAssignments, function (raceAssignment) {
                     for (var i = 0; i < qualRounds.length; i++) {
-                        if (race.raceType == "challenge3x10") {
+                        
+                        if (race.raceType == "challenge3x10" || race.raceType == "challenge2x10") {
                             indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = 1 + 3 * i;
                             indexedRounds[raceAssignment.team.id][0][i][0].startPosition = raceAssignment.teamCast;
                             indexedRounds[raceAssignment.team.id][0][i][0].kart = karts[(raceAssignment.teamCast + (i * 3) - 1) % 10];
@@ -67,6 +70,7 @@ service.factory('roundService', function (indexerService, raceService) {
                             indexedRounds[raceAssignment.team.id][2][i][0].kart = karts[(raceAssignment.teamCast + 2 + (i * 3) - 1) % 10];
 
                         }
+
                         if (race.raceType == "qualification" || race.raceType == "challenge") {
                             indexedRounds[raceAssignment.team.id][0][i][0].driver = raceAssignment.driver;
                             indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / 2) + (5 * i));
@@ -75,21 +79,46 @@ service.factory('roundService', function (indexerService, raceService) {
                             indexedRounds[raceAssignment.team.id][2][i][0].driver = raceAssignment.driver3;
                             indexedRounds[raceAssignment.team.id][2][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / 2) + (5 * i));
                         } 
-                        if (race.raceType == "fairqualification" || race.raceType == "fairchallenge" || race.raceType == "fairchallenge12") {
+                        if (race.raceType == "fairqualification" || race.raceType == "fairchallenge") {
+                            var kartCount = 6;
+                            var teamCount = raceAssignments.length; //race assignments are already indexed
+                            var roundRideCount = 3 * teamCount / kartCount;
+
                             //indexedRounds[raceAssignment.team.id][0][i][0].driver = raceAssignment.driver;
-                            indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / 6) + (5 * i));
-                            indexedRounds[raceAssignment.team.id][0][i][0].startPosition = (raceAssignment.teamCast - 1) % 6 + 1;
-                            indexedRounds[raceAssignment.team.id][0][i][0].kart = karts[(raceAssignment.teamCast - 1 + (i % 2) * 5) % 6];
+                            indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / kartCount) + (roundRideCount * i));
+                            indexedRounds[raceAssignment.team.id][0][i][0].startPosition = (raceAssignment.teamCast - 1) % kartCount + 1;
+                            indexedRounds[raceAssignment.team.id][0][i][0].kart = karts[(raceAssignment.teamCast - 1 + (i % 2) * roundRideCount) % kartCount];
 
                             //indexedRounds[raceAssignment.team.id][1][i][0].driver = raceAssignment.driver2;                            
-                            indexedRounds[raceAssignment.team.id][1][i][0].rideIndex = (window.Math.ceil((10 + raceAssignment.teamCast) / 6) + (5 * i));
-                            indexedRounds[raceAssignment.team.id][1][i][0].startPosition = (9 + raceAssignment.teamCast) % 6 + 1;
-                            indexedRounds[raceAssignment.team.id][1][i][0].kart = karts[(9 + raceAssignment.teamCast + (i % 2) * 5) % 6];
+                            indexedRounds[raceAssignment.team.id][1][i][0].rideIndex = (window.Math.ceil((teamCount + raceAssignment.teamCast) / kartCount) + (roundRideCount * i));
+                            indexedRounds[raceAssignment.team.id][1][i][0].startPosition = (teamCount + raceAssignment.teamCast - 1) % kartCount + 1;
+                            indexedRounds[raceAssignment.team.id][1][i][0].kart = karts[(teamCount + raceAssignment.teamCast - 1 + (i % 2) * roundRideCount) % kartCount];
                             
                             //indexedRounds[raceAssignment.team.id][2][i][0].driver = raceAssignment.driver3;
-                            indexedRounds[raceAssignment.team.id][2][i][0].rideIndex = (window.Math.ceil((20 + raceAssignment.teamCast) / 6) + (5 * i)); 
-                            indexedRounds[raceAssignment.team.id][2][i][0].startPosition = (19 + raceAssignment.teamCast) % 6 + 1;
-                            indexedRounds[raceAssignment.team.id][2][i][0].kart = karts[(19 + raceAssignment.teamCast + (i % 2) * 5) % 6];
+                            indexedRounds[raceAssignment.team.id][2][i][0].rideIndex = (window.Math.ceil((2 * teamCount + raceAssignment.teamCast) / kartCount) + (roundRideCount * i)); 
+                            indexedRounds[raceAssignment.team.id][2][i][0].startPosition = (2 * teamCount + raceAssignment.teamCast - 1) % kartCount + 1;
+                            indexedRounds[raceAssignment.team.id][2][i][0].kart = karts[(2 * teamCount + raceAssignment.teamCast - 1 + (i % 2) * roundRideCount) % kartCount];
+                        }
+
+                        if (race.raceType == "fairqualification12" || race.raceType == "fairchallenge12") {
+                            var kartCount = 6;
+                            var teamCount = raceAssignments.length; //race assignments are already indexed
+                            var roundRideCount = 3 * teamCount / kartCount;
+
+                            //indexedRounds[raceAssignment.team.id][0][i][0].driver = raceAssignment.driver;
+                            indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / kartCount) + (roundRideCount * i));
+                            indexedRounds[raceAssignment.team.id][0][i][0].startPosition = (raceAssignment.teamCast - 1) % kartCount + 1;
+                            indexedRounds[raceAssignment.team.id][0][i][0].kart = karts[(raceAssignment.teamCast - 1 + 3 * i) % kartCount];
+
+                            //indexedRounds[raceAssignment.team.id][1][i][0].driver = raceAssignment.driver2;                            
+                            indexedRounds[raceAssignment.team.id][1][i][0].rideIndex = (window.Math.ceil((teamCount + raceAssignment.teamCast) / kartCount) + (roundRideCount * i));
+                            indexedRounds[raceAssignment.team.id][1][i][0].startPosition = (teamCount + raceAssignment.teamCast - 1) % kartCount + 1;
+                            indexedRounds[raceAssignment.team.id][1][i][0].kart = karts[(raceAssignment.teamCast - 1 + 1 + 3 * i) % kartCount];
+                            
+                            //indexedRounds[raceAssignment.team.id][2][i][0].driver = raceAssignment.driver3;
+                            indexedRounds[raceAssignment.team.id][2][i][0].rideIndex = (window.Math.ceil((2 * teamCount + raceAssignment.teamCast) / kartCount) + (roundRideCount * i)); 
+                            indexedRounds[raceAssignment.team.id][2][i][0].startPosition = (2 * teamCount + raceAssignment.teamCast - 1) % kartCount + 1;
+                            indexedRounds[raceAssignment.team.id][2][i][0].kart = karts[(raceAssignment.teamCast - 1 + 2 + 3 * i) % kartCount];
                         }
                     }
                 });

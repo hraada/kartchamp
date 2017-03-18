@@ -33,7 +33,7 @@ service.factory('qualificationService', function () {
                 callback(arrRounds);
             });
         },
-        getRaceAssignmentsRoundsKartsChallenge3x10: function(rounds, raceAssignments, karts) {
+        getRaceAssignmentsRoundsKartsPer10Karts: function(rounds, raceAssignments, karts) {
             var roundsTeamKarts = {}; 
 
             angular.forEach(raceAssignments, function (raceAssignment) {
@@ -76,12 +76,16 @@ service.factory('qualificationService', function () {
                 var roundPoints = null;
                 var roundPosition;
                 var lastRoundIndex = -1;
+                var maxPoints = 30;
+                if (race.raceType == 'fairchallenge12') {
+                    maxPoints = 36;
+                }                     
                 angular.forEach(results, function (result) {
                     if (lastRoundIndex != result.roundIndex) {
                         lastRoundIndex = result.roundIndex;
-                        roundPoints = 30;
+                        roundPoints = maxPoints;
                     }
-                    roundPosition = 30 - roundPoints + 1;
+                    roundPosition = maxPoints - roundPoints + 1;
                     
                 	//Team place counts (in case of same point sum)
                 	if (teamPlaceCounts[result.team.id] && teamPlaceCounts[result.team.id][roundPosition]) {
@@ -90,7 +94,7 @@ service.factory('qualificationService', function () {
                     	if (teamPlaceCounts[result.team.id]) {
                         	teamPlaceCounts[result.team.id][roundPosition] = 1;
                     	} else {
-                    		teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    		teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0];
                         	teamPlaceCounts[result.team.id][roundPosition] = 1;	
                     	}                    	
                     }

@@ -6,7 +6,9 @@
 service.factory('fairSprintsService', function (persistenceService) {
 
     return {
-        fairSprintsPoints: [undefined, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1],
+        //First index is resultPosition == 0, that's when result was not set
+        fairSprintsPoints: [0, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1],
+        fairSprintsPoints12: [0, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0],
 
         getFairSprintsRoundResults: function (race, roundIndex, callback) {
             race.rounds.filter('roundIndex', '=', roundIndex).order('rideIndex', true).order('resultPosition', true).list(function (results) {
@@ -42,8 +44,12 @@ service.factory('fairSprintsService', function (persistenceService) {
             round.kart = kart;
             persistenceService.add(round);
         },
-        getPoints: function(position) {
-            return this.fairSprintsPoints[position];
+        getPoints: function(position, raceType) {
+            if (raceType != 'fairsprints12') {
+                return this.fairSprintsPoints[position];
+            } else {
+                return this.fairSprintsPoints12[position];
+            }            
         },
         getFairSprintsResults: function (race, callback) {
             var self = this;
@@ -63,54 +69,58 @@ service.factory('fairSprintsService', function (persistenceService) {
                     	if (teamPlaceCounts[result.team.id]) {
                         	teamPlaceCounts[result.team.id][result.resultPosition] = 1;
                     	} else {
-                    		teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            if (race.raceType != 'fairsprints12') {
+                    		  teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            } else {
+                                teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            }
                         	teamPlaceCounts[result.team.id][result.resultPosition] = 1;	
                     	}                    	
                     }
                 	
                     //Team ride points (1-20)
                     if (rideTeamPoints[result.team.id]) {
-                        rideTeamPoints[result.team.id][result.rideIndex] = self.getPoints(result.resultPosition);
+                        rideTeamPoints[result.team.id][result.rideIndex] = self.getPoints(result.resultPosition, race.raceType);
                     } else {
                         rideTeamPoints[result.team.id] = {};
-                        rideTeamPoints[result.team.id][result.rideIndex] = self.getPoints(result.resultPosition);
+                        rideTeamPoints[result.team.id][result.rideIndex] = self.getPoints(result.resultPosition, race.raceType);
                     }
 
                     //Team round points (0,1)
                     if (roundTeamPoints[result.team.id]) {
                         if (roundTeamPoints[result.team.id][result.roundIndex]) {
-                            roundTeamPoints[result.team.id][result.roundIndex] += self.getPoints(result.resultPosition);
+                            roundTeamPoints[result.team.id][result.roundIndex] += self.getPoints(result.resultPosition, race.raceType);
                         } else {
-                            roundTeamPoints[result.team.id][result.roundIndex] = self.getPoints(result.resultPosition);
+                            roundTeamPoints[result.team.id][result.roundIndex] = self.getPoints(result.resultPosition, race.raceType);
                         }
                     } else {
                         roundTeamPoints[result.team.id] = {};
-                        roundTeamPoints[result.team.id][result.roundIndex] = self.getPoints(result.resultPosition);
+                        roundTeamPoints[result.team.id][result.roundIndex] = self.getPoints(result.resultPosition, race.raceType);
                     }
 
                     //Team total points
                     if (totalTeamPoints[result.team.id]) {
-                        totalTeamPoints[result.team.id] += self.getPoints(result.resultPosition);
+                        totalTeamPoints[result.team.id] += self.getPoints(result.resultPosition, race.raceType);
                     } else {
-                        totalTeamPoints[result.team.id] = self.getPoints(result.resultPosition);
+                        totalTeamPoints[result.team.id] = self.getPoints(result.resultPosition, race.raceType);
                     }
 
                     if (roundDriverPoints[result.driver.id]) {
                         if (roundDriverPoints[result.driver.id][result.roundIndex]) {
-                            roundDriverPoints[result.driver.id][result.roundIndex] += self.getPoints(result.resultPosition);
+                            roundDriverPoints[result.driver.id][result.roundIndex] += self.getPoints(result.resultPosition, race.raceType);
                         } else {
-                            roundDriverPoints[result.driver.id][result.roundIndex] = self.getPoints(result.resultPosition);
+                            roundDriverPoints[result.driver.id][result.roundIndex] = self.getPoints(result.resultPosition, race.raceType);
                         }
                     } else {
                         roundDriverPoints[result.driver.id] = {};
-                        roundDriverPoints[result.driver.id][result.roundIndex] = self.getPoints(result.resultPosition);
+                        roundDriverPoints[result.driver.id][result.roundIndex] = self.getPoints(result.resultPosition, race.raceType);
                     }
 
                     //Driver total points
                     if (totalDriverPoints[result.driver.id]) {
-                        totalDriverPoints[result.driver.id] += self.getPoints(result.resultPosition);
+                        totalDriverPoints[result.driver.id] += self.getPoints(result.resultPosition, race.raceType);
                     } else {
-                        totalDriverPoints[result.driver.id] = self.getPoints(result.resultPosition);
+                        totalDriverPoints[result.driver.id] = self.getPoints(result.resultPosition, race.raceType);
                     }
                 });
 

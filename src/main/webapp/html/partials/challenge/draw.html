@@ -36,7 +36,8 @@
                 </div>
                 <button ng-click="printButtonClicked()" class="btn btn-primary pull-right">Tisk</button>
             </div>
-            <h3 class="only-print">Rozpis {{selectedResult + 1}}. kvalifikace</h3>
+            <h3 ng-show="race.raceType != 'challenge3x10'" class="only-print">Rozpis {{selectedResult - 1}}. závodu</h3>
+            <h3 ng-show="race.raceType == 'challenge3x10'" class="only-print">Rozpis {{selectedResult - 2}}. závodu</h3>
             <table class="table table-condensed">
                 <thead>
                 <tr>

@@ -25,7 +25,7 @@ kartchamp.controller('FairSprintsController', function FairSprintsController($sc
 
             //TODO This is stupid, but necessary - object properties are iterated like strings - 1 10 2 3 4...
             var arrResults = [];
-            angular.forEach(indexedResults, function(result) {
+            angular.forEach(indexedResults, function(result) {                
                 arrResults.push(result);
             });
             $scope.results = arrResults;
@@ -45,7 +45,7 @@ kartchamp.controller('FairSprintsController', function FairSprintsController($sc
         }
     }
     $scope.getPoints = function(position) {
-        return fairSprintsService.getPoints(position);
+        return fairSprintsService.getPoints(position, $scope.race.raceType);
     }
 
     $scope.getRideButtonClass = function (rideId) {
@@ -55,9 +55,9 @@ kartchamp.controller('FairSprintsController', function FairSprintsController($sc
             return '';
         }
     }
-    $scope._getRideFilterList = function (lowerRideId, upperRideId, fairSprintRound) {
+    $scope._getRideFilterList = function (lowerRideId, upperRideId, fairSprintRound, teamCount) {
         var rideFilterList = [];
-        for (var i = lowerRideId + ((fairSprintRound - 1) * 10); i < upperRideId + ((fairSprintRound - 1) * 10); i++) {
+        for (var i = lowerRideId + ((fairSprintRound - 1) * teamCount); i < upperRideId + ((fairSprintRound - 1) * teamCount); i++) {
             rideFilterList.push({id: i + 1, label: i + 1 + '. jízda'});
         }
         return rideFilterList;
@@ -67,17 +67,30 @@ kartchamp.controller('FairSprintsController', function FairSprintsController($sc
         window.print();
     }
 
+    $scope.getPrintPageBreakClass = function($rideIndex) {
+        if ($rideIndex % 3 == 0) {
+            return 'page-break';
+        } else {
+            return '';
+        }
+    }
+
     $scope.fairSprintsId = $routeParams.fairSprintsId;
     $scope.fairSprintsRounds = [0, 1];
     $scope.fairSprintRound = $routeParams.fairSprintsId - 1;
 
 
-    $scope.rideFilterList = $scope._getRideFilterList(0, 5, $scope.fairSprintsId);
-    $scope.rideFilterList2 = $scope._getRideFilterList(5, 10, $scope.fairSprintsId);
-    $scope.selectedRide = 1 + (($scope.fairSprintsId - 1) * 10);
-
     raceService.getRaceById($routeParams.raceId, function (race) {
         $scope.race = race;
+
+        var teamCount = 10;
+        if ($scope.race.raceType == 'fairsprints12') {
+            teamCount = 12;
+        }
+        $scope.rideFilterList = $scope._getRideFilterList(0, teamCount / 2, $scope.fairSprintsId, teamCount);
+        $scope.rideFilterList2 = $scope._getRideFilterList(teamCount / 2, teamCount, $scope.fairSprintsId, teamCount);
+        $scope.selectedRide = 1 + (($scope.fairSprintsId - 1) * teamCount);
+
         raceAssignmentService.getRaceAssignments(race, function (raceAssignments) {
             $scope.raceAssignments = raceAssignments;
             $scope.$$phase || $scope.$apply();

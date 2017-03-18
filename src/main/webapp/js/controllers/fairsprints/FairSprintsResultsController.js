@@ -10,7 +10,8 @@ kartchamp.controller('FairSprintsResultsController', function FairSprintsResults
     }
 
     $scope.exportButtonClicked = function () {
-        $scope.teamResultsExport = exportService.getTeamFairSprintsResultsAsHtml($scope.results, 'fairsprints');
+        $scope.teamResultsExport = exportService.getTeamFairSprintsResultsAsHtml($scope.results.teams, 'fairsprints');
+        $scope.driverResultsExport = exportService.getDriverFairSprintsResultsAsHtml($scope.results.drivers, 'fairsprints');
         $scope.showExport = true;
     }
 

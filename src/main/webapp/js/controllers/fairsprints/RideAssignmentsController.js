@@ -24,6 +24,14 @@ kartchamp.controller('RideAssignmentsController',
             window.print();
         }
 
+        $scope.getPrintPageBreakClass = function($rideIndex) {
+            if ($rideIndex % 3 == 0) {
+                return 'page-break';
+            } else {
+                return '';
+            }
+        }
+
         $scope.getResultButtonClass = function (resultId) {
             if ($scope.selectedResult == resultId) {
                 return 'active';
@@ -42,6 +50,11 @@ kartchamp.controller('RideAssignmentsController',
 
         raceService.getRaceById($routeParams.raceId, function (race) {
             $scope.race = race;
+            $scope.teamCount = 10;
+            if (race.raceType == 'fairsprints12') {
+                $scope.teamCount = 12;
+            }
+
             $scope.fairSprintsRounds = [0, 1];
             raceAssignmentService.getRaceAssignments(race, function (raceAssignments) {
                 $scope.raceAssignments = raceAssignments;
