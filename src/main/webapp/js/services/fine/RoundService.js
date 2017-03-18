@@ -75,7 +75,7 @@ service.factory('roundService', function (indexerService, raceService) {
                             indexedRounds[raceAssignment.team.id][2][i][0].driver = raceAssignment.driver3;
                             indexedRounds[raceAssignment.team.id][2][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / 2) + (5 * i));
                         } 
-                        if (race.raceType == "fairqualification" || race.raceType == "fairchallenge") {
+                        if (race.raceType == "fairqualification" || race.raceType == "fairchallenge" || race.raceType == "fairchallenge12") {
                             //indexedRounds[raceAssignment.team.id][0][i][0].driver = raceAssignment.driver;
                             indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / 6) + (5 * i));
                             indexedRounds[raceAssignment.team.id][0][i][0].startPosition = (raceAssignment.teamCast - 1) % 6 + 1;

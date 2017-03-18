@@ -59,9 +59,10 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     {id: 'challenge3x10', label: 'Challenge 3x10'},
                     {id: 'fairsprints', label: 'Spravedlivé sprinty'},
                     {id: 'fairqualification', label: 'Spravedlivá kvalifikace'},
-                    {id: 'fairchallenge', label: 'Spravedlivý challenge'}
+                    {id: 'fairchallenge', label: 'Spravedlivý challenge'},
+                    {id: 'fairchallenge12', label: 'Spravedlivý challenge (12 týmů)'}
                 ],
-                idToLabel: { qualification: 'Kvalifikace', challenge: 'Challenge', challenge3x10: 'Challenge 3x10', fairsprints: 'Spravedlivé sprinty', fairqualification: 'Spravedlivá kvalifikace', fairchallenge: 'Spravedlivý challenge' }
+                idToLabel: { qualification: 'Kvalifikace', challenge: 'Challenge', challenge3x10: 'Challenge 3x10', fairsprints: 'Spravedlivé sprinty', fairqualification: 'Spravedlivá kvalifikace', fairchallenge: 'Spravedlivý challenge', fairchallenge12: 'Spravedlivý challenge (12 týmů)' }
             }
         },
         /**
@@ -82,7 +83,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
          * @return {boolean} true if given race is challenge
          */
         isChallenge: function (race) {
-            if (race.raceType == 'challenge' || race.raceType == 'fairchallenge') {
+            if (race.raceType == 'challenge' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12') {
                 return true;
             } else {
                 return false;
@@ -192,8 +193,11 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     addTeamRounds(team, 3, 'race', 0, 3, false);
                     addTeamRounds(team, 4, 'race', 0, 3, false);
                     addTeamRounds(team, 5, 'race', 0, 3, false);
-                }
-
+                } else if (race.raceType == 'fairchallenge12')
+                    addTeamRounds(team, 0, 'qualification', 0, 3, false);
+                    addTeamRounds(team, 1, 'qualification', 0, 3, false);
+                    addTeamRounds(team, 2, 'race', 0, 3, false);
+                    addTeamRounds(team, 3, 'race', 0, 3, false);
             }
 
             function addRaceAssignment(race, team) {
