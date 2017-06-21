@@ -17,7 +17,7 @@ kartchamp.controller('DriverKartsController',
                     teamName = teamName + '*';
                 }
             }
-            if ($scope.teamRounds && ($scope.race.raceType == 'fairchallenge12' || $scope.race.raceType == 'fairchallenge' || $scope.race.raceType == 'fairqualification')) {
+            if ($scope.teamRounds && ($scope.race.raceType == 'fairchallenge12' || $scope.race.raceType == 'fairchallenge' || $scope.race.raceType == 'fairqualification' || $scope.race.raceType == 'fairqualification12')) {
                 if ($scope.teamRounds[raceAssignment.team.id][0][0] && $scope.teamRounds[raceAssignment.team.id][0][0][0].driver) {
                     teamName = teamName + '*';
                 }

@@ -77,7 +77,7 @@ service.factory('qualificationService', function () {
                 var roundPosition;
                 var lastRoundIndex = -1;
                 var maxPoints = 30;
-                if (race.raceType == 'fairchallenge12') {
+                if (race.raceType == 'fairchallenge12' || race.raceType == 'fairqualification12') {
                     maxPoints = 36;
                 }                     
                 angular.forEach(results, function (result) {

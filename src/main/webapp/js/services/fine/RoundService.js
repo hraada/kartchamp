@@ -44,7 +44,7 @@ service.factory('roundService', function (indexerService, raceService) {
                 qualRounds = [0, 1, 2];
             } if (race.raceType == "challenge2x10") {
                 qualRounds = [0, 1];
-            } else if (race.raceType == "qualification" || race.raceType == "fairqualification") {
+            } else if (race.raceType == "qualification" || race.raceType == "fairqualification" || race.raceType == "fairqualification12") {
                 qualRounds = [0, 1, 2, 3];
             } else {
                 qualRounds = [0, 1];
