@@ -31,7 +31,7 @@
                     <th>Tým</th>
                     <th>Závod 1</th>
                     <th>Závod 2</th>
-                    <th ng-show="race.raceType == 'challenge3x10'">Závod 3</th>
+                    <th ng-show="race.raceType == 'challenge3x10' || race.raceTyoe == 'challenge3x12'">Závod 3</th>
                     <th>Celkem</th>
                 </tr>
                 </thead>
@@ -39,11 +39,11 @@
                 <tr ng-repeat="team in results.teams">
                     <td>{{$index + 1}}</td>
                     <td>{{team.name}}</td>
-                    <td ng-show="race.raceType != 'challenge3x10'">{{team.roundTeamPoints[2]}}</td>
-                    <td ng-show="race.raceType != 'challenge3x10'">{{team.roundTeamPoints[3]}}</td>
-                    <td ng-show="race.raceType == 'challenge3x10'">{{team.roundTeamPoints[3]}}</td>
-                    <td ng-show="race.raceType == 'challenge3x10'">{{team.roundTeamPoints[4]}}</td>
-                    <td ng-show="race.raceType == 'challenge3x10'">{{team.roundTeamPoints[5]}}</td>                    
+                    <td ng-show="race.raceType != 'challenge3x10' && race.raceType != 'challenge3x12'">{{team.roundTeamPoints[2]}}</td>
+                    <td ng-show="race.raceType != 'challenge3x10' && race.raceType != 'challenge3x12'">{{team.roundTeamPoints[3]}}</td>
+                    <td ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'">{{team.roundTeamPoints[3]}}</td>
+                    <td ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'">{{team.roundTeamPoints[4]}}</td>
+                    <td ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'">{{team.roundTeamPoints[5]}}</td>                    
                     <td>{{team.totalTeamPoints}}</td>
                 </tr>
                 </tbody>
@@ -59,7 +59,7 @@
                     <th>Jezdec</th>
                     <th>Závod 1</th>
                     <th>Závod 2</th>
-                    <th ng-show="race.raceType == 'challenge3x10'">Závod 3</th>
+                    <th ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'">Závod 3</th>
                     <th>Celkem</th>
                 </tr>
                 </thead>
@@ -67,11 +67,11 @@
                 <tr ng-repeat="driver in results.drivers">
                     <td>{{$index + 1}}</td>
                     <td>{{driver.name}}</td>
-                    <td ng-show="race.raceType != 'challenge3x10'">{{driver.roundDriverPoints[2]}}</td>
-                    <td ng-show="race.raceType != 'challenge3x10'">{{driver.roundDriverPoints[3]}}</td>
-                    <td ng-show="race.raceType == 'challenge3x10'">{{driver.roundDriverPoints[3]}}</td>
-                    <td ng-show="race.raceType == 'challenge3x10'">{{driver.roundDriverPoints[4]}}</td>
-                    <td ng-show="race.raceType == 'challenge3x10'">{{driver.roundDriverPoints[5]}}</td>                    
+                    <td ng-show="race.raceType != 'challenge3x10' && race.raceType != 'challenge3x12'">{{driver.roundDriverPoints[2]}}</td>
+                    <td ng-show="race.raceType != 'challenge3x10' && race.raceType != 'challenge3x12'">{{driver.roundDriverPoints[3]}}</td>
+                    <td ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'">{{driver.roundDriverPoints[3]}}</td>
+                    <td ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'">{{driver.roundDriverPoints[4]}}</td>
+                    <td ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'">{{driver.roundDriverPoints[5]}}</td>                    
                     <td>{{driver.totalDriverPoints}}</td>
                 </tr>
                 </tbody>

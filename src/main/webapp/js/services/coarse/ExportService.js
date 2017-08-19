@@ -151,7 +151,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     '    <TD class=tab_nadpis>2. část</TD>\n' +
                     '    <TD class=tab_nadpis>Body celkem</TD>\n' +
                     '</TR>\n';
-            } else if (type == 'challenge3x10') {
+            } else if (type == 'challenge3x10' || type == 'challenge3x12') {
                 return '<TR>\n' +
                     '    <TD class=tab_nadpis></TD>\n' +
                     '    <TD class=tab_nadpis>Tým</TD>\n' +
@@ -213,7 +213,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     rowStyle = "tab_2";
                 }
                 var points = '';
-                if (type != 'challenge3x10') {
+                if (type != 'challenge3x10' && type != 'challenge3x12') {
                     points =    '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[2] + '</TD>\n' +
                                 '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[3] + '</TD>\n';                    
                 } else {
@@ -330,7 +330,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
         },
 
         getDriverChallengeResultsAsHtml: function (driverResults, type) {
-            var additionalColumn = (type == 'challenge3x10') ? '<TD class=tab_nadpis>Závod 3</TD>\n' : '';
+            var additionalColumn = (type == 'challenge3x10' || type == 'challenge3x12') ? '<TD class=tab_nadpis>Závod 3</TD>\n' : '';
             var output = '<TABLE border=0 cellSpacing=2 cellPadding=0 width="95%">\n' +
                 '<TBODY>\n' +
                 '<TR>\n' +
@@ -352,7 +352,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     rowStyle = "tab_2";
                 }
                 var points = '';
-                if (type != 'challenge3x10') {
+                if (type != 'challenge3x10' && type != 'challenge3x12') {
                     points =    '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[2] + '</TD>\n' +
                                 '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[3] + '</TD>\n';
                 } else {

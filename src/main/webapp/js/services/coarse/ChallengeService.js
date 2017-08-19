@@ -64,7 +64,7 @@ service.factory('challengeService', function (persistenceService) {
             persistenceService.flush(function () {
                 race.karts.list(function (karts) {
 
-                    if (race.raceType != 'challenge3x10' && race.raceType != 'challenge2x10') {
+                    if (race.raceType != 'challenge3x10' && race.raceType != 'challenge2x10' && race.raceType != 'challenge3x12' && race.raceType != 'challenge2x12') {
                         for (var i = 0; i < rideCount; i++) {
                             var randomKarts = self.shuffleArray(karts);
                             for (var j = 0; j < 6; j++) {
@@ -73,10 +73,14 @@ service.factory('challengeService', function (persistenceService) {
                             }
                         }
                     } else {
+                        var kartCount = 10;
+                        if (race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12') {
+                            kartCount = 12;
+                        }
                         for (var i = 0; i < 3; i++) {
                             var randomKarts = self.shuffleArray(karts);
-                            for (var j = 0; j < 10; j++) {
-                                var result = qualificationResults[i * 10 + j];
+                            for (var j = 0; j < kartCount; j++) {
+                                var result = qualificationResults[i * kartCount + j];
                                 self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * 3 + i + 1, j + 1);
                             }
                         }                        
@@ -119,7 +123,7 @@ service.factory('challengeService', function (persistenceService) {
                 var roundPosition;
                 var lastRoundIndex = -1;
                 var maxPoints = 30;
-                if (race.raceType == 'fairchallenge12') {
+                if (race.raceType == 'fairchallenge12' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12') {
                     maxPoints = 36;
                 }                   
                 angular.forEach(results, function (result) {

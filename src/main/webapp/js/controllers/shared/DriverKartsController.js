@@ -9,7 +9,7 @@ kartchamp.controller('DriverKartsController',
         $scope.getTeamLabelForSelect = function (raceAssignment) {
             var teamName = raceAssignment.team.name;
 
-            if ($scope.teamRounds && ($scope.race.raceType == 'challenge' || $scope.race.raceType == 'qualification' || $scope.race.raceType == 'challenge3x10' || $scope.race.raceType == 'challenge2x10')) {
+            if ($scope.teamRounds && ($scope.race.raceType == 'challenge' || $scope.race.raceType == 'qualification' || $scope.race.raceType == 'challenge3x10' || $scope.race.raceType == 'challenge2x10' || $scope.race.raceType == 'challenge3x12' || $scope.race.raceType == 'challenge2x12')) {
                 if ($scope.teamRounds[raceAssignment.team.id][0][0] && $scope.teamRounds[raceAssignment.team.id][0][0][0].kart) {
                     teamName = teamName + '*';
                 }
@@ -60,13 +60,18 @@ kartchamp.controller('DriverKartsController',
                 $scope.qualificationRounds = [0, 1, 2, 3];
                 $scope.isQualification = true;
             } else {
-                if ($scope.race.raceType == 'challenge3x10') {
+                if ($scope.race.raceType == 'challenge3x10' || $scope.race.raceType == 'challenge3x12') {
                     $scope.qualificationRounds = [0, 1, 2];
                     $scope.isChallenge = true;
-                    $scope.is3x10Challenge = true;
+                    if ($scope.race.raceType == 'challenge3x10') {
+                        $scope.is3x10Challenge = true;
+                    } else {
+                        $scope.is3x12Challenge = true;
+                    }                    
 
                 } else {
                     if ($scope.race.raceType == 'challenge2x10') $scope.is2x10Challenge = true;
+                    if ($scope.race.raceType == 'challenge2x12') $scope.is2x12Challenge = true;
                     $scope.qualificationRounds = [0, 1];
                     $scope.isChallenge = true;
                 }
@@ -77,7 +82,9 @@ kartchamp.controller('DriverKartsController',
 
                 raceService.getRaceKarts($scope.race, function (karts) {
                     if ($scope.is3x10Challenge || $scope.is2x10Challenge) {
-                        $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKartsPer10Karts($scope.qualificationRounds, raceAssignments, karts);
+                        $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKartsPerKartCount($scope.qualificationRounds, raceAssignments, karts, 10);
+                    } else if ($scope.is3x12Challenge || $scope.is2x12Challenge) {
+                        $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKartsPerKartCount($scope.qualificationRounds, raceAssignments, karts, 12);
                     } else {
                         $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKarts($scope.qualificationRounds, raceAssignments, karts);
                     }

@@ -33,14 +33,14 @@ service.factory('qualificationService', function () {
                 callback(arrRounds);
             });
         },
-        getRaceAssignmentsRoundsKartsPer10Karts: function(rounds, raceAssignments, karts) {
+        getRaceAssignmentsRoundsKartsPerKartCount: function(rounds, raceAssignments, karts, kartCount) {
             var roundsTeamKarts = {}; 
 
             angular.forEach(raceAssignments, function (raceAssignment) {
                 roundsTeamKarts[raceAssignment.id] = {};
                 angular.forEach(rounds, function (round) {
                     var cast = raceAssignment.teamCast;
-                    roundsTeamKarts[raceAssignment.id][round] = karts[(cast + round * 3) % 10];                    
+                    roundsTeamKarts[raceAssignment.id][round] = karts[(cast + round * 3) % kartCount];                    
                 });
             });            
 
@@ -77,7 +77,7 @@ service.factory('qualificationService', function () {
                 var roundPosition;
                 var lastRoundIndex = -1;
                 var maxPoints = 30;
-                if (race.raceType == 'fairchallenge12' || race.raceType == 'fairqualification12') {
+                if (race.raceType == 'fairchallenge12' || race.raceType == 'fairqualification12' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12') {
                     maxPoints = 36;
                 }                     
                 angular.forEach(results, function (result) {
@@ -149,13 +149,13 @@ service.factory('qualificationService', function () {
                     });
                     for (var i = 0; i < drivers.length; i++) {
                         drivers[i].qualificationPoints = [];
-                        drivers[i].qualificationPoints[0] = 30 - i;
+                        drivers[i].qualificationPoints[0] = maxPoints - i;
                     }
                     drivers.sort(function (a, b) {
                         return b.roundDriverPoints[2] + b.roundDriverPoints[3] - a.roundDriverPoints[2] - a.roundDriverPoints[3];
                     });
                     for (var i = 0; i < drivers.length; i++) {
-                        drivers[i].qualificationPoints[1] = 30 - i;
+                        drivers[i].qualificationPoints[1] = maxPoints - i;
                     }
                     drivers.sort(function (a, b) {
                         return b.qualificationPoints[0] + b.qualificationPoints[1] - a.qualificationPoints[0] - a.qualificationPoints[1];

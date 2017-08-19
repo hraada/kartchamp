@@ -18,12 +18,12 @@
         <div class="tab-pane active" id="draw">
             <p>Kliknutím na rozlosování závodu N se smažou výsledky tohoto závodu, stanoví se do něj startovní pořadí
                 podle odpovídající kvalifikace a rozlosují se motokáry.</p>            
-            <button ng-show="race.raceType != 'challenge3x10'" class="btn btn-large btn-primary" ng-click="drawRace(0, 2)">Rozlosovat závod 1</button>
-            <button ng-show="race.raceType != 'challenge3x10'" class="btn btn-large btn-primary" ng-click="drawRace(1, 3)">Rozlosovat závod 2</button>
+            <button ng-show="race.raceType != 'challenge3x10' && race.raceType != 'challenge3x12'" class="btn btn-large btn-primary" ng-click="drawRace(0, 2)">Rozlosovat závod 1</button>
+            <button ng-show="race.raceType != 'challenge3x10' && race.raceType != 'challenge3x12'" class="btn btn-large btn-primary" ng-click="drawRace(1, 3)">Rozlosovat závod 2</button>
             
-            <button ng-show="race.raceType == 'challenge3x10'" class="btn btn-large btn-primary" ng-click="drawRace(0, 3)">Rozlosovat závod 1</button>
-            <button ng-show="race.raceType == 'challenge3x10'" class="btn btn-large btn-primary" ng-click="drawRace(1, 4)">Rozlosovat závod 2</button>
-            <button ng-show="race.raceType == 'challenge3x10'" class="btn btn-large btn-primary" ng-click="drawRace(2, 5)">Rozlosovat závod 3</button>
+            <button ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'" class="btn btn-large btn-primary" ng-click="drawRace(0, 3)">Rozlosovat závod 1</button>
+            <button ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'" class="btn btn-large btn-primary" ng-click="drawRace(1, 4)">Rozlosovat závod 2</button>
+            <button ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'" class="btn btn-large btn-primary" ng-click="drawRace(2, 5)">Rozlosovat závod 3</button>
             
         </div>
         <div class="tab-pane" id="driverschedule">
@@ -36,8 +36,8 @@
                 </div>
                 <button ng-click="printButtonClicked()" class="btn btn-primary pull-right">Tisk</button>
             </div>
-            <h3 ng-show="race.raceType != 'challenge3x10'" class="only-print">Rozpis {{selectedResult - 1}}. závodu</h3>
-            <h3 ng-show="race.raceType == 'challenge3x10'" class="only-print">Rozpis {{selectedResult - 2}}. závodu</h3>
+            <h3 ng-show="race.raceType != 'challenge3x10' && race.raceType != 'challenge3x12'" class="only-print">Rozpis {{selectedResult - 1}}. závodu</h3>
+            <h3 ng-show="race.raceType == 'challenge3x10' || race.raceType == 'challenge3x12'" class="only-print">Rozpis {{selectedResult - 2}}. závodu</h3>
             <table class="table table-condensed">
                 <thead>
                 <tr>

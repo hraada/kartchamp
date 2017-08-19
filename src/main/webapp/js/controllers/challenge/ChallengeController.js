@@ -59,7 +59,7 @@ kartchamp.controller('ChallengeController', function ChallengeController($scope,
     raceService.getRaceById($routeParams.raceId, function (race) {
         $scope.race = race;
         $scope.challengeId = $routeParams.challengeId;
-        if ($scope.race.raceType != 'challenge3x10') {
+        if ($scope.race.raceType != 'challenge3x10' && $scope.race.raceType != 'challenge3x12') {
             $scope.challengeRounds = [2, 3];
         } else {
             $scope.challengeRounds = [3, 4, 5];
@@ -68,7 +68,7 @@ kartchamp.controller('ChallengeController', function ChallengeController($scope,
         $scope.selectedResult = $scope.challengeRounds[0];
         $scope.selectedRide = 1 + (($scope.challengeId - 1) * 10);        
         $scope.maxPoints = 30;
-        if ($scope.race.raceType != 'challenge3x10' && $scope.race.raceType != 'challenge2x10') {
+        if ($scope.race.raceType != 'challenge3x10' && $scope.race.raceType != 'challenge2x10' && $scope.race.raceType != 'challenge3x12' && $scope.race.raceType != 'challenge2x12') {
             if ($scope.race.raceType != 'fairchallenge12') {
                 $scope.rideFilterList = getRideFilterList(0, 5, $scope.challengeId, 10);
                 $scope.rideFilterList2 = getRideFilterList(5, 10, $scope.challengeId, 10);
@@ -79,7 +79,18 @@ kartchamp.controller('ChallengeController', function ChallengeController($scope,
                 $scope.rideFilterList2 = getRideFilterList(6, 12, $scope.challengeId, 12);
             }
         } else {
-            if ($scope.race.raceType == 'challenge3x10') {
+            if ($scope.race.raceType == 'challenge3x12') {
+                $scope.maxPoints = 36;
+                $scope.rideFilterList = getRideFilterList(-1, 2, $scope.challengeId, 12);
+                $scope.rideFilterList2 = getRideFilterList(2, 5, $scope.challengeId, 12);
+                $scope.rideFilterList3 = getRideFilterList(5, 8, $scope.challengeId, 12);
+
+            } else if ($scope.race.raceType == 'challenge2x12') {
+                $scope.maxPoints = 36;
+                $scope.rideFilterList = getRideFilterList(-4, -1, 2, 12);
+                $scope.rideFilterList2 = getRideFilterList(-1, 2, 2, 12);
+
+            } else if ($scope.race.raceType == 'challenge3x10') {
                 $scope.rideFilterList = getRideFilterList(-1, 2, $scope.challengeId, 10);
                 $scope.rideFilterList2 = getRideFilterList(2, 5, $scope.challengeId, 10);
                 $scope.rideFilterList3 = getRideFilterList(5, 8, $scope.challengeId, 10);

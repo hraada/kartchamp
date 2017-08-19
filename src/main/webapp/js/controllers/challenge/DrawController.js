@@ -9,7 +9,7 @@
         raceService.getRaceById($routeParams.raceId, function (race) {
             $scope.race = race;
 
-            if ($scope.race.raceType != 'challenge3x10') {
+            if ($scope.race.raceType != 'challenge3x10' && $scope.race.raceType != 'challenge3x12') {
                 $scope.challengeRounds = [2, 3];
             } else {
                 $scope.challengeRounds = [3, 4, 5];
