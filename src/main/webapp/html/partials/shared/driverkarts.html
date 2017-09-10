@@ -65,7 +65,7 @@
                 </tbody>
             </table>
             </div>
-            <div ng-show="race.raceType == 'fairqualification' || race.raceType == 'fairqualification12' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12' || race.raceType == 'challenge3x10' || race.raceType == 'challenge2x10' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12'">
+            <div ng-show="race.raceType == 'fairqualification' || race.raceType == 'fairqualification12on9' || race.raceType == 'fairqualification12' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12' || race.raceType == 'challenge3x10' || race.raceType == 'challenge2x10' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12'">
             <p>Tým: <select
                     ng-options="raceAssignment as getTeamLabelForSelect(raceAssignment) for raceAssignment in raceAssignments"
                     ng-model="raceAssignment"/></p>
@@ -103,8 +103,8 @@
                     <td>{{raceRideRound.kart.number}}</td>
                 </tr>
                 </tbody>
-            </table>                
-            </div>            
+            </table>
+            </div>
         </div>
 
         <div class="tab-pane" id="driverschedule">
@@ -138,7 +138,7 @@
                     <td>{{raceRideRound.kart.number}}</td>
                 </tr>
                 </tbody>
-            </table>            
+            </table>
         </div>
     </div>
 </div>

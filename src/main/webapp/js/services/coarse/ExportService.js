@@ -142,8 +142,17 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     '    <TD class=tab_nadpis>Kvalifikace 4</TD>\n' +
                     '    <TD class=tab_nadpis>Body celkem</TD>\n' +
                     '</TR>\n';
-            }
-            else if (type == 'fairsprints' || type == 'fairsprints12') {
+            } else if (type == 'fairqualification12on9') {
+              return '<TR>\n' +
+                  '    <TD class=tab_nadpis></TD>\n' +
+                  '    <TD class=tab_nadpis>Tým</TD>\n' +
+                  '    <TD class=tab_nadpis>Kvalifikace 1</TD>\n' +
+                  '    <TD class=tab_nadpis>Kvalifikace 2</TD>\n' +
+                  '    <TD class=tab_nadpis>Kvalifikace 3</TD>\n' +
+                  '    <TD class=tab_nadpis>Body celkem</TD>\n' +
+                  '</TR>\n';
+
+            } else if (type == 'fairsprints' || type == 'fairsprints12') {
                 return '<TR>\n' +
                     '    <TD class=tab_nadpis></TD>\n' +
                     '    <TD class=tab_nadpis>Tým</TD>\n' +
@@ -188,9 +197,11 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     '   <TD class=' + rowStyle + '>' + teamResult.name + '</TD>\n' +
                     '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[0] + '</TD>\n' +
                     '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[1] + '</TD>\n' +
-                    '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[2] + '</TD>\n' +
-                    '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[3] + '</TD>\n' +
-                    '   <TD class=' + rowStyle + 'c>' + teamResult.totalTeamPoints + '</TD>\n' +
+                    '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[2] + '</TD>\n';
+
+                    if (type != 'fairqualification12on9') output += '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[3] + '</TD>\n';
+
+                    output += '   <TD class=' + rowStyle + 'c>' + teamResult.totalTeamPoints + '</TD>\n' +
                     '</TR>\n';
                 index++;
             });
@@ -215,7 +226,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                 var points = '';
                 if (type != 'challenge3x10' && type != 'challenge3x12') {
                     points =    '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[2] + '</TD>\n' +
-                                '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[3] + '</TD>\n';                    
+                                '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[3] + '</TD>\n';
                 } else {
                     points =    '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[3] + '</TD>\n' +
                                 '   <TD class=' + rowStyle + 'c>' + teamResult.roundTeamPoints[4] + '</TD>\n' +
@@ -283,7 +294,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                 output += '<TR>\n' +
                     '   <TD class=' + rowStyle + '>' + index + '</TD>\n' +
                     '   <TD class=' + rowStyle + '>' + driverResult.name + '</TD>\n' +
-                    '   <TD class=' + rowStyle + '>' + driverResult.teamName + '</TD>\n' +                    
+                    '   <TD class=' + rowStyle + '>' + driverResult.teamName + '</TD>\n' +
                     '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[0] + '</TD>\n' +
                     '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[1] + '</TD>\n' +
                     '   <TD class=' + rowStyle + 'c>' + driverResult.totalDriverPoints + '</TD>\n' +
@@ -293,8 +304,9 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
 
             output += '</TBODY></TABLE>\n';
             return output;
-        },        
-        getDriverQualificationResultsAsHtml: function (driverResults) {
+        },
+        getDriverQualificationResultsAsHtml: function (driverResults, type) {
+            var additionalColumn = (type == 'fairqualification12on9') ? '<TD class=tab_nadpis>Kvalifikace 3</TD>\n' : '';
             var output = '<TABLE border=0 cellSpacing=2 cellPadding=0 width="95%">\n' +
                 '<TBODY>\n' +
                 '<TR>\n' +
@@ -303,6 +315,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                 '    <TD class=tab_nadpis>Tým</TD>\n' +
                 '    <TD class=tab_nadpis>Kvalifikace 1</TD>\n' +
                 '    <TD class=tab_nadpis>Kvalifikace 2</TD>\n' +
+                additionalColumn +
                 '    <TD class=tab_nadpis>Body celkem</TD>\n' +
                 '</TR>\n';
 
@@ -319,8 +332,11 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     '   <TD class=' + rowStyle + '>' + driverResult.name + '</TD>\n' +
                     '   <TD class=' + rowStyle + '>' + driverResult.teamName + '</TD>\n' +
                     '   <TD class=' + rowStyle + 'c>' + driverResult.qualificationPoints[0] + '</TD>\n' +
-                    '   <TD class=' + rowStyle + 'c>' + driverResult.qualificationPoints[1] + '</TD>\n' +
-                    '   <TD class=' + rowStyle + 'c>' + driverResult.totalDriverPoints + '</TD>\n' +
+                    '   <TD class=' + rowStyle + 'c>' + driverResult.qualificationPoints[1] + '</TD>\n';
+
+                if (type == 'fairqualification12on9') output += '   <TD class=' + rowStyle + 'c>' + driverResult.qualificationPoints[2] + '</TD>\n';
+
+                output += '   <TD class=' + rowStyle + 'c>' + driverResult.totalDriverPoints + '</TD>\n' +
                     '</TR>\n';
                 index++;
             });
@@ -359,7 +375,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                     points =    '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[3] + '</TD>\n' +
                                 '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[4] + '</TD>\n' +
                                 '   <TD class=' + rowStyle + 'c>' + driverResult.roundDriverPoints[5] + '</TD>\n';
-                }             
+                }
                 output += '<TR>\n' +
                     '   <TD class=' + rowStyle + '>' + index + '</TD>\n' +
                     '   <TD class=' + rowStyle + '>' + driverResult.name + '</TD>\n' +

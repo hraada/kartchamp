@@ -34,17 +34,17 @@ service.factory('qualificationService', function () {
             });
         },
         getRaceAssignmentsRoundsKartsPerKartCount: function(rounds, raceAssignments, karts, kartCount) {
-            var roundsTeamKarts = {}; 
+            var roundsTeamKarts = {};
 
             angular.forEach(raceAssignments, function (raceAssignment) {
                 roundsTeamKarts[raceAssignment.id] = {};
                 angular.forEach(rounds, function (round) {
                     var cast = raceAssignment.teamCast;
-                    roundsTeamKarts[raceAssignment.id][round] = karts[(cast + round * 3) % kartCount];                    
+                    roundsTeamKarts[raceAssignment.id][round] = karts[(cast + round * 3) % kartCount];
                 });
-            });            
+            });
 
-            return roundsTeamKarts;           
+            return roundsTeamKarts;
         },
         getRaceAssignmentsRoundsKarts: function (rounds, raceAssignments, karts) {
             var upperKarts = karts.slice(0, 3);
@@ -72,21 +72,21 @@ service.factory('qualificationService', function () {
                 var roundDriverPoints = {};
                 var totalDriverPoints = {};
                 var teamPlaceCounts = {};
-                
+
                 var roundPoints = null;
                 var roundPosition;
                 var lastRoundIndex = -1;
                 var maxPoints = 30;
-                if (race.raceType == 'fairchallenge12' || race.raceType == 'fairqualification12' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12') {
+                if (race.raceType == 'fairchallenge12' || race.raceType == 'fairqualification12' || race.raceType == 'fairqualification12on9' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12') {
                     maxPoints = 36;
-                }                     
+                }
                 angular.forEach(results, function (result) {
                     if (lastRoundIndex != result.roundIndex) {
                         lastRoundIndex = result.roundIndex;
                         roundPoints = maxPoints;
                     }
                     roundPosition = maxPoints - roundPoints + 1;
-                    
+
                 	//Team place counts (in case of same point sum)
                 	if (teamPlaceCounts[result.team.id] && teamPlaceCounts[result.team.id][roundPosition]) {
                 		teamPlaceCounts[result.team.id][roundPosition]++;
@@ -95,10 +95,10 @@ service.factory('qualificationService', function () {
                         	teamPlaceCounts[result.team.id][roundPosition] = 1;
                     	} else {
                     		teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0];
-                        	teamPlaceCounts[result.team.id][roundPosition] = 1;	
-                    	}                    	
+                        	teamPlaceCounts[result.team.id][roundPosition] = 1;
+                    	}
                     }
-                	
+
                     //Team round points
                     if (roundTeamPoints[result.team.id]) {
                         if (roundTeamPoints[result.team.id][result.roundIndex]) {
@@ -144,34 +144,49 @@ service.factory('qualificationService', function () {
                         drivers.push({name: raceAssignment.driver2.name + ' ' + raceAssignment.driver2.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver2.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver2.id]});
                         drivers.push({name: raceAssignment.driver3.name + ' ' + raceAssignment.driver3.surname, teamName: raceAssignment.team.name, roundDriverPoints: roundDriverPoints[raceAssignment.driver3.id], totalDriverPoints: totalDriverPoints[raceAssignment.driver3.id]});
                     });
-                    drivers.sort(function (a, b) {
-                        return b.roundDriverPoints[0] + b.roundDriverPoints[1] - a.roundDriverPoints[0] - a.roundDriverPoints[1];
-                    });
-                    for (var i = 0; i < drivers.length; i++) {
-                        drivers[i].qualificationPoints = [];
-                        drivers[i].qualificationPoints[0] = maxPoints - i;
+
+                    if (race.raceType != 'fairqualification12on9') {
+                      drivers.sort(function (a, b) {
+                          return b.roundDriverPoints[0] + b.roundDriverPoints[1] - a.roundDriverPoints[0] - a.roundDriverPoints[1];
+                      });
+                      for (var i = 0; i < drivers.length; i++) {
+                          drivers[i].qualificationPoints = [];
+                          drivers[i].qualificationPoints[0] = maxPoints - i;
+                      }
+                      drivers.sort(function (a, b) {
+                          return b.roundDriverPoints[2] + b.roundDriverPoints[3] - a.roundDriverPoints[2] - a.roundDriverPoints[3];
+                      });
+                      for (var i = 0; i < drivers.length; i++) {
+                          drivers[i].qualificationPoints[1] = maxPoints - i;
+                      }
+                      drivers.sort(function (a, b) {
+                          return b.qualificationPoints[0] + b.qualificationPoints[1] - a.qualificationPoints[0] - a.qualificationPoints[1];
+                      });
+                    } else {
+                      drivers.sort(function (a, b) {
+                          return b.roundDriverPoints[0] + b.roundDriverPoints[1] + b.roundDriverPoints[2] - a.roundDriverPoints[0] - a.roundDriverPoints[1] - a.roundDriverPoints[2];
+                      });
+                      for (var i = 0; i < drivers.length; i++) {
+                          drivers[i].qualificationPoints = [];
+                          drivers[i].qualificationPoints[0] = drivers[i].roundDriverPoints[0];
+                          drivers[i].qualificationPoints[1] = drivers[i].roundDriverPoints[1];
+                          drivers[i].qualificationPoints[2] = drivers[i].roundDriverPoints[2];
+                      }
+
+
                     }
-                    drivers.sort(function (a, b) {
-                        return b.roundDriverPoints[2] + b.roundDriverPoints[3] - a.roundDriverPoints[2] - a.roundDriverPoints[3];
-                    });
-                    for (var i = 0; i < drivers.length; i++) {
-                        drivers[i].qualificationPoints[1] = maxPoints - i;
-                    }
-                    drivers.sort(function (a, b) {
-                        return b.qualificationPoints[0] + b.qualificationPoints[1] - a.qualificationPoints[0] - a.qualificationPoints[1];
-                    });
 
                     teams.sort(function (a, b) {
                     	if (b.totalTeamPoints != a.totalTeamPoints) {
-                    		return b.totalTeamPoints - a.totalTeamPoints;	
+                    		return b.totalTeamPoints - a.totalTeamPoints;
                     	} else {
                     		for (var i = 1; i <= 10; i++) {
                     			if (b.teamPlaceCounts[i] != a.teamPlaceCounts[i]) {
                     				return b.teamPlaceCounts[i] - a.teamPlaceCounts[i];
-                    			}                    			
+                    			}
                     		}
                     		return 0;
-                    	}                 
+                    	}
                     });
                     callback({teams: teams, drivers: drivers});
                 });

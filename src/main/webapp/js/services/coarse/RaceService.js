@@ -16,11 +16,11 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 season.races.list(function (races) {
                     callback(races);
                 });
-        		
+
         	} else {
                 Race.all().list(function (races) {
                     callback(races);
-                });        		
+                });
         	}
         },
         /**
@@ -56,31 +56,33 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 formatList: [
                     {id: 'qualification', label: 'Kvalifikace (10 týmů, 6 motokár)'},
                     {id: 'challenge', label: 'Challenge (10 týmů, 6 motokár)'},
-                    {id: 'challenge3x10', label: 'Big Challenge 3x10 (10 týmů, 10 motokár)'},                    
+                    {id: 'challenge3x10', label: 'Big Challenge 3x10 (10 týmů, 10 motokár)'},
                     {id: 'challenge3x12', label: 'Big Challenge 3x12 (12 týmů, 12 motokár)'},
                     {id: 'challenge2x10', label: 'Big Challenge 2x10 (10 týmů, 10 motokár)'},
                     {id: 'challenge2x12', label: 'Big Challenge 2x12 (12 týmů, 12 motokár)'},
                     {id: 'fairsprints', label: 'Spravedlivé sprinty (10 týmů, 10 motokár)'},
-                    {id: 'fairsprints12', label: 'Spravedlivé sprinty (12 týmů, 12 motokár)'},                    
+                    {id: 'fairsprints12', label: 'Spravedlivé sprinty (12 týmů, 12 motokár)'},
                     {id: 'fairqualification', label: 'Spravedlivá kvalifikace (10 týmů, 6 motokár)'},
                     {id: 'fairqualification12', label: 'Spravedlivá kvalifikace (12 týmů, 6 motokár)'},
+                    {id: 'fairqualification12on9', label: 'Spravedlivá kvalifikace (12 týmů, 9 motokár)'},
                     {id: 'fairchallenge', label: 'Spravedlivý challenge (10 týmů, 6 motokár)'},
                     {id: 'fairchallenge12', label: 'Spravedlivý challenge (12 týmů, 6 motokár)'}
                 ],
-                idToLabel: { 
-                    qualification: 'Kvalifikace (10 týmů, 6 motokár)', 
-                    challenge: 'Challenge (10 týmů, 6 motokár)', 
-                    challenge3x10: 'Big Challenge 3x10 (10 týmů, 10 motokár)',                     
-                    challenge3x12: 'Big Challenge 3x12 (12 týmů, 12 motokár)',                     
-                    challenge2x10: 'Big Challenge 2x10 (10 týmů, 10 motokár)', 
-                    challenge2x12: 'Big Challenge 2x12 (12 týmů, 12 motokár)',                     
-                    fairsprints: 'Spravedlivé sprinty (10 týmů, 10 motokár)', 
+                idToLabel: {
+                    qualification: 'Kvalifikace (10 týmů, 6 motokár)',
+                    challenge: 'Challenge (10 týmů, 6 motokár)',
+                    challenge3x10: 'Big Challenge 3x10 (10 týmů, 10 motokár)',
+                    challenge3x12: 'Big Challenge 3x12 (12 týmů, 12 motokár)',
+                    challenge2x10: 'Big Challenge 2x10 (10 týmů, 10 motokár)',
+                    challenge2x12: 'Big Challenge 2x12 (12 týmů, 12 motokár)',
+                    fairsprints: 'Spravedlivé sprinty (10 týmů, 10 motokár)',
                     fairsprints12: 'Spravedlivé sprinty (12 týmů, 12 motokár)' ,
-                    fairqualification: 'Spravedlivá kvalifikace (10 týmů, 6 motokár)', 
-                    fairqualification12: 'Spravedlivá kvalifikace (12 týmů, 6 motokár)', 
-                    fairchallenge: 'Spravedlivý challenge (10 týmů, 6 motokár)', 
+                    fairqualification: 'Spravedlivá kvalifikace (10 týmů, 6 motokár)',
+                    fairqualification12: 'Spravedlivá kvalifikace (12 týmů, 6 motokár)',
+                    fairqualification12on9: 'Spravedlivá kvalifikace (12 týmů, 9 motokár)',
+                    fairchallenge: 'Spravedlivý challenge (10 týmů, 6 motokár)',
                     fairchallenge12: 'Spravedlivý challenge (12 týmů, 6 motokár)'
-                    
+
                 }
             }
         },
@@ -241,6 +243,10 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     for (var i = 0; i < 4; i++) {
                         addTeamRounds(team, i, 'qualification', 0, 3, false);
                     }
+                } else if (race.raceType == 'fairqualification12on9') {
+                  for (var i = 0; i < 3; i++) {
+                      addTeamRounds(team, i, 'qualification', 0, 3, false);
+                  }
                 } else if (race.raceType == 'challenge' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12') {
                     addTeamRounds(team, 0, 'qualification', 0, 3, false);
                     addTeamRounds(team, 1, 'qualification', 0, 3, false);
@@ -277,6 +283,8 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 addKarts(12, race);
             } else if (race.raceType == 'fairsprints' || race.raceType == 'challenge3x10' || race.raceType == 'challenge2x10') {
                 addKarts(10, race);
+            } else if (race.raceType == 'fairqualification12on9') {
+                addKarts(9, race);
             } else {
                 addKarts(6, race);
             }
@@ -287,12 +295,12 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     addTeamRaceRounds(race, seasonAssignment[0].team); //It doesnt matter which index...
                     addRaceAssignment(race, seasonAssignment[0].team);
                     seasonAssignmentsCount++;
-                });                                  
+                });
                 if (seasonAssignmentsCount < 10) {
                     error('Nepodařilo se založit data závodu. Pro založení závodu v sezóně je potřeba mít založené členy všech týmů pro sezónu.');
                 } else {
                     callback();
-                }                
+                }
             })
 
 

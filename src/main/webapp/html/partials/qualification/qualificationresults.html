@@ -32,7 +32,7 @@
                     <th>Kvalifikace 1</th>
                     <th>Kvalifikace 2</th>
                     <th>Kvalifikace 3</th>
-                    <th>Kvalifikace 4</th>
+                    <th ng-hide="isFairQualification12on9">Kvalifikace 4</th>
                     <th>Celkem</th>
                 </tr>
                 </thead>
@@ -43,7 +43,7 @@
                     <td>{{team.roundTeamPoints[0]}}</td>
                     <td>{{team.roundTeamPoints[1]}}</td>
                     <td>{{team.roundTeamPoints[2]}}</td>
-                    <td>{{team.roundTeamPoints[3]}}</td>
+                    <td ng-hide="isFairQualification12on9">{{team.roundTeamPoints[3]}}</td>
                     <td>{{team.totalTeamPoints}}</td>
                 </tr>
                 </tbody>
@@ -58,7 +58,8 @@
                     <th>Pořadí</th>
                     <th>Jezdec</th>
                     <th>Kvalifikace 1</th>
-                    <th>Kvalifikace 2</th>
+                    <th >Kvalifikace 2</th>
+                    <th ng-show="isFairQualification12on9">Kvalifikace 3</th>
                     <th>Celkem</th>
                 </tr>
                 </thead>
@@ -68,7 +69,8 @@
                     <td>{{driver.name}}</td>
                     <td>{{driver.qualificationPoints[0]}}</td>
                     <td>{{driver.qualificationPoints[1]}}</td>
-                    <td>{{driver.qualificationPoints[0] + driver.qualificationPoints[1]}}</td>
+                    <td ng-show="isFairQualification12on9">{{driver.qualificationPoints[2]}}</td>
+                    <td>{{driver.qualificationPoints[0] + driver.qualificationPoints[1] + driver.qualificationPoints[2]}}</td>
                 </tr>
                 </tbody>
             </table>
