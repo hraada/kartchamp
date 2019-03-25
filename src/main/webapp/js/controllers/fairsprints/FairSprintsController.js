@@ -87,8 +87,11 @@ kartchamp.controller('FairSprintsController', function FairSprintsController($sc
         if ($scope.race.raceType == 'fairsprints12') {
             teamCount = 12;
         }
-        $scope.rideFilterList = $scope._getRideFilterList(0, teamCount / 2, $scope.fairSprintsId, teamCount);
-        $scope.rideFilterList2 = $scope._getRideFilterList(teamCount / 2, teamCount, $scope.fairSprintsId, teamCount);
+        if ($scope.race.raceType == 'fairsprints9') {
+            teamCount = 9;
+        }
+        $scope.rideFilterList = $scope._getRideFilterList(0, Math.ceil(teamCount / 2), $scope.fairSprintsId, teamCount);
+        $scope.rideFilterList2 = $scope._getRideFilterList(Math.ceil(teamCount / 2), teamCount, $scope.fairSprintsId, teamCount);
         $scope.selectedRide = 1 + (($scope.fairSprintsId - 1) * teamCount);
 
         raceAssignmentService.getRaceAssignments(race, function (raceAssignments) {

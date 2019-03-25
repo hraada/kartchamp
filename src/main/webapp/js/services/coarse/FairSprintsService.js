@@ -8,6 +8,7 @@ service.factory('fairSprintsService', function (persistenceService) {
     return {
         //First index is resultPosition == 0, that's when result was not set
         fairSprintsPoints: [0, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1],
+        fairSprintsPoints9: [0, 10, 8, 6, 5, 4, 3, 2, 1, 0],
         fairSprintsPoints12: [0, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0],
 
         getFairSprintsRoundResults: function (race, roundIndex, callback) {
@@ -45,9 +46,11 @@ service.factory('fairSprintsService', function (persistenceService) {
             persistenceService.add(round);
         },
         getPoints: function(position, raceType) {
-            if (raceType != 'fairsprints12') {
+            if (raceType == 'fairsprints') {
                 return this.fairSprintsPoints[position];
-            } else {
+            } else if (raceType == 'fairsprints9') {
+                return this.fairSprintsPoints9[position];
+            } else if (raceType == 'fairsprints12') {
                 return this.fairSprintsPoints12[position];
             }            
         },
@@ -69,9 +72,11 @@ service.factory('fairSprintsService', function (persistenceService) {
                     	if (teamPlaceCounts[result.team.id]) {
                         	teamPlaceCounts[result.team.id][result.resultPosition] = 1;
                     	} else {
-                            if (race.raceType != 'fairsprints12') {
-                    		  teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                            } else {
+                            if (race.raceType == 'fairsprints') {
+                    		    teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            } else if (race.raceType == 'fairsprints9') {
+                                teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            } else if (race.raceType == 'fairsprints12') {
                                 teamPlaceCounts[result.team.id] = [undefined, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             }
                         	teamPlaceCounts[result.team.id][result.resultPosition] = 1;	

@@ -61,6 +61,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     {id: 'challenge2x10', label: 'Big Challenge 2x10 (10 týmů, 10 motokár)'},
                     {id: 'challenge2x12', label: 'Big Challenge 2x12 (12 týmů, 12 motokár)'},
                     {id: 'fairsprints', label: 'Spravedlivé sprinty (10 týmů, 10 motokár)'},
+                    {id: 'fairsprints9', label: 'Spravedlivé sprinty (9 týmů, 9 motokár)'},
                     {id: 'fairsprints12', label: 'Spravedlivé sprinty (12 týmů, 12 motokár)'},
                     {id: 'fairqualification', label: 'Spravedlivá kvalifikace (10 týmů, 6 motokár)'},
                     {id: 'fairqualification12', label: 'Spravedlivá kvalifikace (12 týmů, 6 motokár)'},
@@ -76,6 +77,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     challenge2x10: 'Big Challenge 2x10 (10 týmů, 10 motokár)',
                     challenge2x12: 'Big Challenge 2x12 (12 týmů, 12 motokár)',
                     fairsprints: 'Spravedlivé sprinty (10 týmů, 10 motokár)',
+                    fairsprints9: 'Spravedlivé sprinty (9 týmů, 9 motokár)' ,
                     fairsprints12: 'Spravedlivé sprinty (12 týmů, 12 motokár)' ,
                     fairqualification: 'Spravedlivá kvalifikace (10 týmů, 6 motokár)',
                     fairqualification12: 'Spravedlivá kvalifikace (12 týmů, 6 motokár)',
@@ -172,7 +174,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
          * @return {boolean} true if given race is challenge
          */
         isFairSprints: function (race) {
-            if (race.raceType == 'fairsprints' || race.raceType == 'fairsprints12') {
+            if (race.raceType == 'fairsprints' || race.raceType == 'fairsprints9' || race.raceType == 'fairsprints12') {
                 return true;
             } else {
                 return false;
@@ -255,6 +257,9 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 } else if (race.raceType == 'fairsprints') {
                     addTeamRounds(team, 0, 'race', 0, 10, true);
                     addTeamRounds(team, 1, 'race', 10, 20, true);
+                } else if (race.raceType == 'fairsprints9') {
+                    addTeamRounds(team, 0, 'race', 0, 9, true);
+                    addTeamRounds(team, 1, 'race', 9, 18, true);
                 } else if (race.raceType == 'fairsprints12') {
                     addTeamRounds(team, 0, 'race', 0, 12, true);
                     addTeamRounds(team, 1, 'race', 12, 24, true);
@@ -283,6 +288,8 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 addKarts(12, race);
             } else if (race.raceType == 'fairsprints' || race.raceType == 'challenge3x10' || race.raceType == 'challenge2x10') {
                 addKarts(10, race);
+            } else if (race.raceType == 'fairsprints9') {
+                addKarts(9, race);
             } else if (race.raceType == 'fairqualification12on9') {
                 addKarts(9, race);
             } else {
@@ -296,7 +303,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     addRaceAssignment(race, seasonAssignment[0].team);
                     seasonAssignmentsCount++;
                 });
-                if (seasonAssignmentsCount < 10) {
+                if (seasonAssignmentsCount < 9) {
                     error('Nepodařilo se založit data závodu. Pro založení závodu v sezóně je potřeba mít založené členy všech týmů pro sezónu.');
                 } else {
                     callback();

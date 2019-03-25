@@ -54,6 +54,9 @@ kartchamp.controller('RideAssignmentsController',
             if (race.raceType == 'fairsprints12') {
                 $scope.teamCount = 12;
             }
+            if (race.raceType == 'fairsprints9') {
+                $scope.teamCount = 9;
+            }
 
             $scope.fairSprintsRounds = [0, 1];
             raceAssignmentService.getRaceAssignments(race, function (raceAssignments) {

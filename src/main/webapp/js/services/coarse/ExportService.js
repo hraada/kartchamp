@@ -152,7 +152,7 @@ service.factory('exportService', function (RaceTimeFilter, fairSprintsService) {
                   '    <TD class=tab_nadpis>Body celkem</TD>\n' +
                   '</TR>\n';
 
-            } else if (type == 'fairsprints' || type == 'fairsprints12') {
+            } else if (type == 'fairsprints' || type == 'fairsprints12' || type == 'fairsprints9') {
                 return '<TR>\n' +
                     '    <TD class=tab_nadpis></TD>\n' +
                     '    <TD class=tab_nadpis>Tým</TD>\n' +
