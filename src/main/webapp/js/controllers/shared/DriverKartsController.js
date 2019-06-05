@@ -17,7 +17,7 @@ kartchamp.controller('DriverKartsController',
                     teamName = teamName + '*';
                 }
             }
-            if ($scope.teamRounds && ($scope.race.raceType == 'fairchallenge12' || $scope.race.raceType == 'fairchallenge' || $scope.race.raceType == 'fairqualification' || $scope.race.raceType == 'fairqualification12'  || $scope.race.raceType == 'fairqualification12on9')) {
+            if ($scope.teamRounds && ($scope.race.raceType == 'fairchallenge9' || $scope.race.raceType == 'fairchallenge12' || $scope.race.raceType == 'fairchallenge' || $scope.race.raceType == 'fairqualification' || $scope.race.raceType == 'fairqualification12'  || $scope.race.raceType == 'fairqualification12on9')) {
                 if ($scope.teamRounds[raceAssignment.team.id][0][0] && $scope.teamRounds[raceAssignment.team.id][0][0][0].driver) {
                     teamName = teamName + '*';
                 }
@@ -88,6 +88,8 @@ kartchamp.controller('DriverKartsController',
                         $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKartsPerKartCount($scope.qualificationRounds, raceAssignments, karts, 10);
                     } else if ($scope.is3x12Challenge || $scope.is2x12Challenge) {
                         $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKartsPerKartCount($scope.qualificationRounds, raceAssignments, karts, 12);
+                    } else if ($scope.race.raceType == 'fairchallenge9'){
+                        $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKarts($scope.qualificationRounds, raceAssignments, karts, 6);
                     } else {
                         $scope.raceAssignmentsRoundsKarts = qualificationService.getRaceAssignmentsRoundsKarts($scope.qualificationRounds, raceAssignments, karts);
                     }

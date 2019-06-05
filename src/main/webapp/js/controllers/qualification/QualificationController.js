@@ -70,7 +70,12 @@ kartchamp.controller('QualificationController', function QualificationController
         }
         $scope.selectedResult = $scope.qualificationRounds[0];
         $scope.maxPoints = 30;
-        if ($scope.race.raceType != 'challenge3x10' && $scope.race.raceType != 'challenge2x10' && $scope.race.raceType != 'challenge3x12' && $scope.race.raceType != 'challenge2x12') {
+        if ($scope.race.raceType == 'fairchallenge9') {
+            $scope.maxPoints = 27;
+            $scope.rideFilterList = getRideFilterList(0, 5, $scope.qualificationId, 9);
+            $scope.rideFilterList2 = getRideFilterList(5, 10, $scope.qualificationId, 9);
+        }
+        else if ($scope.race.raceType != 'challenge3x10' && $scope.race.raceType != 'challenge2x10' && $scope.race.raceType != 'challenge3x12' && $scope.race.raceType != 'challenge2x12') {
             if ($scope.race.raceType != 'fairchallenge12' && $scope.race.raceType != 'fairqualification12' && $scope.race.raceType != 'fairqualification12on9') {
                 $scope.rideFilterList = getRideFilterList(0, 5, $scope.qualificationId, 10);
                 $scope.rideFilterList2 = getRideFilterList(5, 10, $scope.qualificationId, 10);

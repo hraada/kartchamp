@@ -69,14 +69,19 @@ kartchamp.controller('ChallengeController', function ChallengeController($scope,
         $scope.selectedRide = 1 + (($scope.challengeId - 1) * 10);        
         $scope.maxPoints = 30;
         if ($scope.race.raceType != 'challenge3x10' && $scope.race.raceType != 'challenge2x10' && $scope.race.raceType != 'challenge3x12' && $scope.race.raceType != 'challenge2x12') {
-            if ($scope.race.raceType != 'fairchallenge12') {
-                $scope.rideFilterList = getRideFilterList(0, 5, $scope.challengeId, 10);
-                $scope.rideFilterList2 = getRideFilterList(5, 10, $scope.challengeId, 10);
-            } else {
+            if ($scope.race.raceType == 'fairchallenge12') {
                 $scope.maxPoints = 36;
-                $scope.selectedRide = 1 + (($scope.challengeId - 1) * 12);        
+                $scope.selectedRide = 1 + (($scope.challengeId - 1) * 12);
                 $scope.rideFilterList = getRideFilterList(0, 6, $scope.challengeId, 12);
                 $scope.rideFilterList2 = getRideFilterList(6, 12, $scope.challengeId, 12);
+            } else if ($scope.race.raceType == 'fairchallenge9') {
+                $scope.maxPoints = 27;
+                $scope.selectedRide = (($scope.challengeId - 1) * 9);
+                $scope.rideFilterList = getRideFilterList(-1, 3, $scope.challengeId, 9);
+                $scope.rideFilterList2 = getRideFilterList(3, 7, $scope.challengeId, 9);
+            } else {
+                $scope.rideFilterList = getRideFilterList(0, 5, $scope.challengeId, 10);
+                $scope.rideFilterList2 = getRideFilterList(5, 10, $scope.challengeId, 10);
             }
         } else {
             if ($scope.race.raceType == 'challenge3x12') {

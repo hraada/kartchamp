@@ -80,6 +80,9 @@ service.factory('qualificationService', function () {
                 if (race.raceType == 'fairchallenge12' || race.raceType == 'fairqualification12' || race.raceType == 'fairqualification12on9' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12') {
                     maxPoints = 36;
                 }
+                if (race.raceType == 'fairchallenge9') {
+                    maxPoints = 27;
+                }
                 angular.forEach(results, function (result) {
                     if (lastRoundIndex != result.roundIndex) {
                         lastRoundIndex = result.roundIndex;

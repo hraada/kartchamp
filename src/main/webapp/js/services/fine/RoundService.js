@@ -91,10 +91,10 @@ service.factory('roundService', function (indexerService, raceService) {
                             indexedRounds[raceAssignment.team.id][2][i][0].driver = raceAssignment.driver3;
                             indexedRounds[raceAssignment.team.id][2][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / 2) + (5 * i));
                         }
-                        if (race.raceType == "fairqualification" || race.raceType == "fairchallenge") {
+                        if (race.raceType == "fairqualification" || race.raceType == "fairchallenge" || race.raceType == 'fairchallenge9') {
                             var kartCount = 6;
                             var teamCount = raceAssignments.length; //race assignments are already indexed
-                            var roundRideCount = 3 * teamCount / kartCount;
+                            var roundRideCount = window.Math.ceil(3 * teamCount / kartCount);
 
                             //indexedRounds[raceAssignment.team.id][0][i][0].driver = raceAssignment.driver;
                             indexedRounds[raceAssignment.team.id][0][i][0].rideIndex = (window.Math.ceil(raceAssignment.teamCast / kartCount) + (roundRideCount * i));
@@ -153,6 +153,7 @@ service.factory('roundService', function (indexerService, raceService) {
                             indexedRounds[raceAssignment.team.id][2][i][0].startPosition = (2 * teamCount + raceAssignment.teamCast - 1) % kartCount + 1;
                             indexedRounds[raceAssignment.team.id][2][i][0].kart = karts[(raceAssignment.teamCast - 1 + 2 + 3 * i) % kartCount];
                         }
+
                     }
                 });
                 callback(indexedRounds);

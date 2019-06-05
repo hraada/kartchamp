@@ -61,15 +61,30 @@ service.factory('challengeService', function (persistenceService) {
             if (race.raceType == 'fairchallenge12') {
                 rideCount = 6;
             }
+            if (race.raceType == 'fairchallenge9') {
+                rideCount = 4;
+            }
             persistenceService.flush(function () {
                 race.karts.list(function (karts) {
 
-                    if (race.raceType != 'challenge3x10' && race.raceType != 'challenge2x10' && race.raceType != 'challenge3x12' && race.raceType != 'challenge2x12') {
+                    if (race.raceType != 'challenge3x10' && race.raceType != 'challenge2x10' && race.raceType != 'challenge3x12' && race.raceType != 'challenge2x12' && race.raceType != 'fairchallenge9') {
                         for (var i = 0; i < rideCount; i++) {
                             var randomKarts = self.shuffleArray(karts);
                             for (var j = 0; j < 6; j++) {
                                 var result = qualificationResults[i * 6 + j];
                                 self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * rideCount + i + 1, j + 1);
+                            }
+                        }
+                    } else if (race.raceType == 'fairchallenge9') {
+                        for (var i = 0; i < 4; i++) {
+                            var randomKarts = self.shuffleArray(karts);
+                            for (var j = 0; j < 7; j++) {
+                                // Here happens the switch between 6 (quali) and 7 (race) karts
+                                var result = qualificationResults[i * 7 + j];
+                                // In last iteration, we have only 6 qualification results (because of switch from 5x6 to 4*7)
+                                if (result != null) {
+                                    self.addRaceRound(race, result.team, result.driver, randomKarts[j], raceRoundIndex, raceRoundIndex * rideCount + i + 1, j + 1);
+                                }
                             }
                         }
                     } else {
@@ -125,7 +140,10 @@ service.factory('challengeService', function (persistenceService) {
                 var maxPoints = 30;
                 if (race.raceType == 'fairchallenge12' || race.raceType == 'challenge3x12' || race.raceType == 'challenge2x12') {
                     maxPoints = 36;
-                }                   
+                }
+                if (race.raceType == 'fairchallenge9') {
+                    maxPoints = 27;
+                }
                 angular.forEach(results, function (result) {
                     if (lastRoundIndex != result.roundIndex) {
                         lastRoundIndex = result.roundIndex;

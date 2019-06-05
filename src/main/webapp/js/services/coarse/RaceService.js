@@ -67,7 +67,8 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     {id: 'fairqualification12', label: 'Spravedlivá kvalifikace (12 týmů, 6 motokár)'},
                     {id: 'fairqualification12on9', label: 'Spravedlivá kvalifikace (12 týmů, 9 motokár)'},
                     {id: 'fairchallenge', label: 'Spravedlivý challenge (10 týmů, 6 motokár)'},
-                    {id: 'fairchallenge12', label: 'Spravedlivý challenge (12 týmů, 6 motokár)'}
+                    {id: 'fairchallenge12', label: 'Spravedlivý challenge (12 týmů, 6 motokár)'},
+                    {id: 'fairchallenge9', label: 'Spravedlivý challenge (9 týmů, 6 & 7 motokár)'}
                 ],
                 idToLabel: {
                     qualification: 'Kvalifikace (10 týmů, 6 motokár)',
@@ -83,7 +84,9 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                     fairqualification12: 'Spravedlivá kvalifikace (12 týmů, 6 motokár)',
                     fairqualification12on9: 'Spravedlivá kvalifikace (12 týmů, 9 motokár)',
                     fairchallenge: 'Spravedlivý challenge (10 týmů, 6 motokár)',
-                    fairchallenge12: 'Spravedlivý challenge (12 týmů, 6 motokár)'
+                    fairchallenge12: 'Spravedlivý challenge (12 týmů, 6 motokár)',
+                    // It's better to have 7 karts on race to avoid 3 people in last heat
+                    fairchallenge9: 'Spravedlivý challenge (9 týmů, kvalifikace 6 & závod 7 motokár)'
 
                 }
             }
@@ -106,7 +109,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
          * @return {boolean} true if given race is challenge
          */
         isChallenge: function (race) {
-            if (race.raceType == 'challenge' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12') {
+            if (race.raceType == 'challenge' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12' || race.raceType == 'fairchallenge9') {
                 return true;
             } else {
                 return false;
@@ -249,7 +252,7 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                   for (var i = 0; i < 3; i++) {
                       addTeamRounds(team, i, 'qualification', 0, 3, false);
                   }
-                } else if (race.raceType == 'challenge' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12') {
+                } else if (race.raceType == 'challenge' || race.raceType == 'fairchallenge' || race.raceType == 'fairchallenge12' || race.raceType == 'fairchallenge9') {
                     addTeamRounds(team, 0, 'qualification', 0, 3, false);
                     addTeamRounds(team, 1, 'qualification', 0, 3, false);
                     addTeamRounds(team, 2, 'race', 0, 3, false);
@@ -292,6 +295,8 @@ service.factory('raceService', function (persistenceService, seasonAssignmentSer
                 addKarts(9, race);
             } else if (race.raceType == 'fairqualification12on9') {
                 addKarts(9, race);
+            } else if (race.raceType == 'fairchallenge9') {
+                addKarts(7, race);
             } else {
                 addKarts(6, race);
             }
