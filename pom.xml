@@ -13,7 +13,7 @@
 	<properties>
 		<jetty.version>6.1.23</jetty.version>
 		<javaee.version>6.0</javaee.version>
-		<spring.version>3.2.2.RELEASE</spring.version>
+		<spring.version>5.3.18</spring.version>
 		<cglib.version>2.2.2</cglib.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jackson-mapper-asl.version>1.9.12</jackson-mapper-asl.version>
